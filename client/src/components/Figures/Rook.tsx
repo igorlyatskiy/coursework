@@ -22,9 +22,9 @@ export default function Rook({ color }: FigureProps) {
         fill={
           color === FIGURES_COLORS_NAMES.white
             ? "#F0F7F4"
-            : "#40B3A2"
+            : "#000"
         }
-        stroke='#E27D5F'
+        stroke={color === FIGURES_COLORS_NAMES.white ? '#E27D5F' : '#40B3A2'}
         strokeWidth='2'
         mask='url(#path-1-inside-1)'
       />

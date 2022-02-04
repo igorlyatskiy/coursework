@@ -4,9 +4,11 @@ import ChessService from "../../chess.js/chess";
 import { GAME_START_GAME } from "./actions";
 import { State } from "./type";
 
+const chess = new ChessService()
+
 const defaultState: State = {
   game: {
-    chess: new ChessService(),
+    chess,
     board: [ [] ]
   }
 }

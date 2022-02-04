@@ -11,6 +11,7 @@ export default function Knight({ color }: FigureProps) {
       viewBox='0 0 46 78'
       xmlns='http://www.w3.org/2000/svg'
       className='figure figure_knight'
+      style={{transform: 'rotateY(180deg)'}}
     >
       <mask id='a' fill='white'>
         <path
@@ -21,9 +22,9 @@ export default function Knight({ color }: FigureProps) {
         fill={
           color === FIGURES_COLORS_NAMES.white
             ? "#F0F7F4"
-            : "#40B3A2"
+            : "#000"
         }
-        stroke='#E27D5F'
+        stroke={color === FIGURES_COLORS_NAMES.white ? '#E27D5F' : '#40B3A2'}
         mask='url(#a)'
         strokeWidth='2'
       />
