@@ -1,6 +1,7 @@
 import { Piece } from "chess.ts";
 
 import UseFigure from "./hooks/UseFigure";
+import { useDrag } from "react-dnd";
 
 interface FigureProps {
   elementIndex: number;
@@ -9,7 +10,14 @@ interface FigureProps {
 }
 
 export default function Figure({ elementIndex, rowIndex, element }: FigureProps) {
-  const figureSvg = UseFigure({ key: `${elementIndex} ${rowIndex}`, element });
+  const unicId = `${elementIndex} ${rowIndex}`
 
-  return <div>{figureSvg}</div>
+  const figureSvg = UseFigure({ key: unicId, element });
+
+  const [ collected, drag, dragPreview ] = useDrag(() => ({
+    type: 'figure',
+    item: { id: unicId }
+  }))
+
+  return <div style={{ zIndex: '10' }} ref={drag}>{figureSvg}</div>
 }
