@@ -12,7 +12,7 @@ interface GetFigureParams {
   element: Piece | null
 }
 
-export default function UseFigure({ key, element }: GetFigureParams) {
+export default function useFigure({ key, element }: GetFigureParams) {
   if (element !== null) {
     switch (element.type) {
       case FIGURES_NAMES.BISHOP:

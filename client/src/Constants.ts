@@ -47,7 +47,7 @@ class Constants {
   AI_NAME = 'ai'
 
   letters: string[] = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' ]
-  numbers: number[] = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+  numbers: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
 
   defaultPlayers: PlayerData[] = [
     {
@@ -74,3 +74,5 @@ class Constants {
 const constantsInstance = new Constants();
 
 export default constantsInstance
+
+export const getSquare = (rowIndex: number, colIndex: number) => constantsInstance.letters[colIndex] + constantsInstance.numbers[rowIndex]

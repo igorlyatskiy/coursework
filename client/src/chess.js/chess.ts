@@ -49,7 +49,6 @@ export default class ChessService {
     const moves = (data) ? this.chess.moves({ square: data }) : this.chess.moves();
     return moves
       .map((e) => {
-        console.log(e);
         const reg = /\w\d/g;
         const result: any = e.match(reg)?.filter((move) => move[0].toUpperCase() !== move[0]);
         if (e.includes('=Q')) {

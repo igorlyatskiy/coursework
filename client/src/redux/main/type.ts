@@ -4,6 +4,7 @@ import { Board } from "../../Constants";
 export interface State {
   game: {
     chess: ChessService,
-    board: Board
+    board: Board,
+    validMoves: string[]
   }
 }
