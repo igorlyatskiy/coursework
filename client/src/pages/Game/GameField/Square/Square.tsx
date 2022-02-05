@@ -22,7 +22,7 @@ interface SquareProps {
 export default function Square({ rowIndex, elementIndex, element }: SquareProps) {
   const { game }: State = useSelector((root: RootReducer) => root.mainReducer);
 
-  const squareColor = (rowIndex + elementIndex) % 2 === 0 ? '#fff' : 'rgb(1,50,32)'
+  const squareColor = (rowIndex + elementIndex) % 2 === 0 ? '#f0dab5' : '#b58763'
   const isOverColor = 'yellow';
   const canDropColor = 'green'
 
