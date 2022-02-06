@@ -1,11 +1,11 @@
-import { FIGURES_NAMES } from "../../../../../../Constants";
+import { FIGURES_COLORS_NAMES, FIGURES_NAMES } from "../../../../../../Constants";
 import { Piece } from "chess.ts";
 
 interface GetFigureParams {
   element: Piece | null
 }
 
-export default function useFigure({ element }: GetFigureParams) {
+const getFigureName = (element: Piece | null) => {
   if (element !== null) {
     switch (element.type) {
       case FIGURES_NAMES.BISHOP:
@@ -25,4 +25,11 @@ export default function useFigure({ element }: GetFigureParams) {
         throw new Error('Default figure type expected')
     }
   }
+}
+
+export default function useFigure({ element }: GetFigureParams) {
+  const figureSvgName = getFigureName(element);
+  const figureColorString = element?.color === FIGURES_COLORS_NAMES.black ? '_black' : ''
+
+  return`/img/svg/figures/${figureSvgName}${figureColorString}.svg`;
 }

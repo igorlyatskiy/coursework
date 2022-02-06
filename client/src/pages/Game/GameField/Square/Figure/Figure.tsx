@@ -1,12 +1,15 @@
 import { Piece } from "chess.ts";
-import { DragPreviewImage, useDrag } from "react-dnd";
+import { useDrag } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
+import { getEmptyImage } from "react-dnd-html5-backend";
+import { useEffect, useState } from "react";
 
 import useFigure from "./hooks/useFigure";
 import { getValidMoves } from "../../../../../redux/main/actions";
 import { FIGURES_COLORS_NAMES, getSquare } from "../../../../../Constants";
 import { State } from "../../../../../redux/main/type";
 import { RootReducer } from "../../../../../redux";
+import { CustomDragLayer } from "./CustomDragLayer";
 
 interface FigureProps {
   elementIndex: number;
@@ -16,14 +19,12 @@ interface FigureProps {
 
 export default function Figure({ elementIndex, rowIndex, element }: FigureProps) {
   const { game }: State = useSelector((root: RootReducer) => root.mainReducer);
-  const figureSvgName = useFigure({ element });
-
-  const figureSvgSrc = `/img/svg/figures/${figureSvgName}${element?.color === FIGURES_COLORS_NAMES.black ? '_black' : ''}.svg`;
-  const squareName = getSquare(rowIndex, elementIndex)
-
   const dispatch = useDispatch()
 
-  const [ collected, drag, dragPreview ] = useDrag(() => ({
+  const squareName = getSquare(rowIndex, elementIndex)
+  const figureSvgSrc = useFigure({ element });
+
+  const [ { isDragging }, drag, dragPreview ] = useDrag(() => ({
     type: 'figure',
     item: { square: squareName },
     canDrag: () => {
@@ -32,18 +33,29 @@ export default function Figure({ elementIndex, rowIndex, element }: FigureProps)
         dispatch(getValidMoves(squareName));
       }
       return !!moves.length
-    }
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
   }))
 
-  return <>
-    {
-      !!element && <>
-        <DragPreviewImage connect={dragPreview} src={figureSvgSrc}/>
-        <div style={{ zIndex: '10' }} ref={drag}>
-          <img src={figureSvgSrc} alt="Figure" style={{ userSelect: 'none', transform: 'translate(0, 0)' }}/>
-        </div>
-      </>
-    }
+  useEffect(() => {
+    dragPreview(getEmptyImage(), { captureDraggingState: true });
+  }, []);
 
+  if (!element) {
+    return null;
+  }
+
+  return <>
+    <div style={{ zIndex: '5' }} ref={drag}>
+      <img
+        src={figureSvgSrc}
+        alt="Figure"
+        style={{ userSelect: 'none', opacity: `${isDragging ? 0 : 1}` }}
+      />
+    </div>
+
+    {isDragging && <CustomDragLayer src={figureSvgSrc}/>}
   </>
 }
