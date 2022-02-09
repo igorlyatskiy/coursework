@@ -5,6 +5,6 @@ export interface State {
   game: {
     chess: ChessService,
     board: Board,
-    validMoves: string[]
+    validMoves: string[],
   }
 }
