@@ -6,5 +6,9 @@ export interface State {
     chess: ChessService,
     board: Board,
     validMoves: string[],
+    isGameActive: boolean
+  },
+  app: {
+    isServerConnected: boolean,
   }
 }

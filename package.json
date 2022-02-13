@@ -1,0 +1,21 @@
+{
+  "name": "coursework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client:dev": "cd client && npm run dev",
+    "server:dev": "cd server && npm run start:dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igorlyatskiy/coursework.git"
+  },
+  "keywords": [],
+  "author": "Igor Lyatskiy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/igorlyatskiy/coursework/issues"
+  },
+  "homepage": "https://github.com/igorlyatskiy/coursework#readme"
+}

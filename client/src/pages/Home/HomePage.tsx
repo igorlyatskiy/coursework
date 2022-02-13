@@ -11,8 +11,10 @@ export default function HomePage() {
     {
       icon: <FireTwoTone twoToneColor="orange"/>,
       text: 'Game.',
-      path: '/game',
-      action: () => dispatch(startGame('asdf')),
+      path: '/rooms',
+      action: () => {
+
+      },
     },
     {
       icon: <PlaySquareTwoTone twoToneColor='red'/>,

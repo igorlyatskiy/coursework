@@ -27,9 +27,10 @@ export class GameGateway
   private logger: Logger = new Logger('GameGateway');
 
   @SubscribeMessage('joinGame')
-  joinGame(client: Socket, id: number): void {
-    this.logger.log('Client joined the game', id);
-    this.io.emit('test');
+  async joinGame(client: Socket, gameId: string): Promise<void> {
+    this.logger.log('Client joined the game', gameId);
+    const gameStatus = await this.gameService.checkGameStatus(gameId);
+    this.io.emit(gameStatus ? 'approveGameJoin' : 'denyGameJoin');
   }
 
   afterInit(server: Server) {

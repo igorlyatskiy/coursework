@@ -8,7 +8,7 @@ async function bootstrap() {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
   // TODO REMOVE IT
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const configService = app.get(ConfigService);
   app.useGlobalPipes(new ValidationPipe());
 
@@ -19,4 +19,5 @@ async function bootstrap() {
     logger.log(`SERVER IS RUNNING ON PORT [ ${PORT} ]`),
   );
 }
+
 bootstrap();

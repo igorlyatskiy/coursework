@@ -1,10 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Logger } from '@nestjs/common';
 
-import { Game } from './game.entity';
+import { GameEntity } from './game.entity';
 
-@EntityRepository(Game)
-export class GameRepository extends Repository<Game> {
+@EntityRepository(GameEntity)
+export class GameRepository extends Repository<GameEntity> {
   private logger = new Logger('UsersRepository');
 
   async getRoomById(id: string) {
