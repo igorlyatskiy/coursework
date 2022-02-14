@@ -16,6 +16,7 @@
     "antd": "^4.18.5",
     "axios": "^0.25.0",
     "chess.ts": "^0.16.2",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dnd": "^14.0.5",
     "react-dnd-html5-backend": "^14.1.0",
@@ -23,6 +24,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
+    "react-use": "^17.3.2",
     "socket.io-client": "^4.4.1",
     "styled-components": "^5.3.3",
     "typescript": "~4.1.5"

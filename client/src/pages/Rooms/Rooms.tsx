@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Button, Table, Tag, Typography } from 'antd';
+import { Button,  Table, Tag, Typography } from 'antd';
+
+
 import CreateRoomModal from "./CreateRoomModal";
 import api from "../../api/api";
 
 const { Link } = Typography;
 
+let searchInput: any;
 export default function RoomsPage() {
   const [ isCreateRoomModalVisible, setCreateRoomModalVisibility ] = useState(false);
   const [ rooms, setRooms ] = useState([]);
@@ -28,7 +31,7 @@ export default function RoomsPage() {
       default:
         return 'gray'
     }
-  }
+  };
 
   const columns = [
     {

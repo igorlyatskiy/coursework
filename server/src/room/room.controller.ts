@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import { RoomService } from './room.service';
 
 @Controller()
+@UseGuards(AuthGuard('jwt'))
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 

@@ -1,5 +1,6 @@
 import ChessService from "../../chess.js/chess";
 import { Board } from "../../Constants";
+import { Session } from "../../components/WithSession";
 
 export interface State {
   game: {
@@ -10,5 +11,6 @@ export interface State {
   },
   app: {
     isServerConnected: boolean,
+    session: Session | null
   }
 }

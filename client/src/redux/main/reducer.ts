@@ -2,7 +2,14 @@ import { createReducer } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 
 import ChessService from "../../chess.js/chess";
-import { APP_CONNECT, GAME_APPROVE_START, GAME_GET_VALID_MOVES, GAME_MOVE_FIGURE, GAME_START_GAME } from "./actions";
+import {
+  APP_CONNECT,
+  APP_SET_SESSION,
+  GAME_APPROVE_START,
+  GAME_GET_VALID_MOVES,
+  GAME_MOVE_FIGURE,
+  GAME_START_GAME
+} from "./actions";
 import { State } from "./type";
 
 const chess = new ChessService()
@@ -17,6 +24,7 @@ const defaultState: State = {
   },
   app: {
     isServerConnected: false,
+    session: null
   }
 }
 
@@ -24,13 +32,16 @@ export const mainReducer = createReducer(defaultState, {
   [APP_CONNECT]: (state) => {
     state.app.isServerConnected = true;
   },
+  [APP_SET_SESSION]: (state, { payload }) => {
+    state.app.session = payload;
+  },
   [GAME_START_GAME]: (state, { payload }) => {
     state.game.chess.reset();
     state.game.board = state.game.chess.board();
     state.game.validMoves = [];
     wsIo.emit('joinGame', payload);
   },
-  [GAME_APPROVE_START]: (state)=>{
+  [GAME_APPROVE_START]: (state) => {
     state.game.isGameActive = true;
   },
   [GAME_GET_VALID_MOVES]: (state, { payload }) => {

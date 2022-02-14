@@ -13,11 +13,18 @@ export default () => ({
   app: {
     host: process.env.APP_HOST || 'localhost',
     port: process.env.APP_PORT || 8080,
+    admins: JSON.parse(process.env.APP_ADMINS),
   },
   auth: {
     google: {
       clientId: process.env.GOOGLE_AUTH_CLIENT_ID,
       clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
+      callbackUrl: 'http://localhost:8080/auth/google/callback',
+    },
+    jwt: {
+      secret: process.env.JWT_SECRET_KEY,
+      exp: parseInt(process.env.JWT_EXP_TIME),
+      cookieName: 'JWT_TOKEN',
     },
   },
 });

@@ -7,14 +7,14 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 import * as serviceWorker from './serviceWorker';
 import { store } from "./redux/store";
-import App from './App';
+import WithSession from "./components/WithSession";
 
 ReactDOM.render(
   <React.StrictMode>
     <DndProvider backend={HTML5Backend}>
       <BrowserRouter>
         <Provider store={store}>
-          <App/>
+          <WithSession/>
         </Provider>
       </BrowserRouter>
     </DndProvider>

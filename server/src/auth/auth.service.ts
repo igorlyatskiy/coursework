@@ -1,14 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
+import { JwtService } from './jwt.service';
 
 @Injectable()
 export class AuthService {
-  googleLogin(req) {
+  private readonly logger = new Logger('AuthService');
+
+  constructor(private readonly jwtService: JwtService) {}
+
+  async validateGoogle(req: any): Promise<string> {
+    this.logger.log(req.user);
+
     if (!req.user) {
-      return 'No user from google';
+      return null;
     }
-    return {
-      message: 'User info from Google',
-      user: req.user,
-    };
+
+    return this.jwtService.createToken(req.user);
+  }
+
+  createAuthUser(data: any) {
+    return data;
   }
 }

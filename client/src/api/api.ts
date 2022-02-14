@@ -2,18 +2,28 @@ import axios from "axios";
 
 class Api {
   baseUrl: string = 'http://localhost:8080'
+  axiosInstance = axios.create({ baseURL: this.baseUrl, withCredentials: true })
 
   static instance() {
     return apiInstance
   }
 
-  async getRooms() {
-    const { data } = await axios.get(this.baseUrl + '/rooms');
+  async getSession() {
+    const { data } = await this.axiosInstance.get('/auth/session');
     return data;
   }
 
-  createRoom(roomName: string) {
-    return axios.post(this.baseUrl + '/rooms', { name: roomName })
+  async clearSession() {
+    await this.axiosInstance.get('/auth/google/logout')
+  }
+
+  async getRooms() {
+    const { data } = await this.axiosInstance.get('/rooms');
+    return data;
+  }
+
+  async createRoom(roomName: string) {
+    return await this.axiosInstance.post('/rooms', { name: roomName });
   }
 }
 
