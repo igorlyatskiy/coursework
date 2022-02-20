@@ -52,7 +52,11 @@ export default function Figure({ elementIndex, rowIndex, element }: FigureProps)
       <img
         src={figureSvgSrc}
         alt="Figure"
-        style={{ userSelect: 'none', opacity: `${isDragging ? 0 : 1}` }}
+        style={{
+          cursor: "pointer",
+          userSelect: 'none',
+          opacity: `${isDragging ? 0 : 1}`,
+        }}
       />
     </div>
 
