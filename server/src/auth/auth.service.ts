@@ -12,8 +12,6 @@ export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
   async validateGoogle(req: any): Promise<string> {
-    this.logger.log(req.user);
-
     if (!req.user) {
       return null;
     }

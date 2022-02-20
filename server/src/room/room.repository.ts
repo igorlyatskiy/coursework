@@ -8,15 +8,18 @@ import { UserEntity } from '../user/user.entity';
 export class RoomRepository extends Repository<RoomEntity> {
   private logger = new Logger('RoomRepository');
 
-  async createOne({ name }: { name: string }) {
-    let creator = null;
-    if (process.env.DEBUG === 'true') {
-      creator = await UserEntity.findOne({
-        where: {
-          username: 'igorlyatskiy',
-        },
-      });
-    }
+  async createOne({
+    name,
+    authorEmail,
+  }: {
+    name: string;
+    authorEmail: string;
+  }) {
+    const creator = await UserEntity.findOne({
+      where: {
+        email: authorEmail,
+      },
+    });
     const room = new RoomEntity(name, creator);
     await room.save();
   }
@@ -31,7 +34,9 @@ export class RoomRepository extends Repository<RoomEntity> {
       title: item.name,
       levels: item.creator?.levels ?? [],
       roomId: item.id,
-      playerName: item.creator?.username ?? 'anonymous',
+      playerName:
+        item.creator?.username ??
+        `${item.creator?.firstName} ${item.creator?.lastName}`,
     }));
   }
 }

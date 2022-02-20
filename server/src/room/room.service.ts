@@ -13,8 +13,8 @@ export class RoomService {
     return this.roomRepository.getAll();
   }
 
-  async createRoom(roomName: string) {
-    await this.roomRepository.createOne({ name: roomName });
+  async createRoom(roomName: string, authorEmail: string) {
+    await this.roomRepository.createOne({ name: roomName, authorEmail });
     return this.getAllActiveRooms();
   }
 }

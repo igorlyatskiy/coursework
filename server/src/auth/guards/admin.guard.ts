@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-  private readonly logger = new Logger('CourseGuard');
+  private readonly logger = new Logger('AdminGuard');
   private admins: string[];
 
   constructor(private configService: ConfigService) {

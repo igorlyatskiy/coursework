@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { RoomService } from './room.service';
@@ -14,7 +14,7 @@ export class RoomController {
   }
 
   @Post('rooms')
-  createRoom(@Body('name') roomName: string) {
-    return this.roomService.createRoom(roomName);
+  createRoom(@Body('name') roomName: string, @Req() req) {
+    return this.roomService.createRoom(roomName, req.user.email);
   }
 }

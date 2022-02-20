@@ -4,6 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { AuthService } from '../auth.service';
+import { UserService } from '../../user/user.service';
 
 interface GoogleItem {
   value: string;
@@ -24,6 +25,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
+    private readonly userService: UserService,
   ) {
     super({
       clientID: configService.get('auth.google.clientId'),
@@ -40,13 +42,24 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     profile: Profile,
   ): Promise<any> {
     const { name, emails, photos } = profile;
+
     const user = {
       email: emails[0].value,
       firstName: name.givenName,
       lastName: name.familyName,
-      picture: photos[0].value,
-      accessToken,
+      avatar: photos[0].value,
     };
-    return user;
+    const existingUser = await this.userService.getUserByEmail(user.email);
+
+    if (!existingUser) {
+      return this.userService.createUser({
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        avatar: user.avatar,
+      });
+    }
+
+    return existingUser;
   }
 }

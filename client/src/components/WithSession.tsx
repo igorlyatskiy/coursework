@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import React from "react";
-
+import { useDispatch } from "react-redux";
 
 import api from "../api/api";
 import App from "../App";
-import { useDispatch } from "react-redux";
 import { setSession } from "../redux/main/actions";
 
 export interface Session {
@@ -25,7 +24,7 @@ function WithSession() {
             email: data.email,
             firstName: data.firstName,
             lastName: data.lastName,
-            avatar: data.picture,
+            avatar: data.avatar,
           }
           dispatch(setSession(sessionData));
         })
