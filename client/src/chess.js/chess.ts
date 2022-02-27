@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Chess, PartialMove, Piece } from "chess.ts";
+import { Chess, Color, PartialMove, Piece } from "chess.ts";
 
 
 import ChessConstants, { bishopEvalBlack, bishopEvalWhite, blackDebuts, evalQueen, kingEvalBlack, kingEvalWhite, knightEval, pawnEvalBlack, pawnEvalWhite, rookEvalBlack, rookEvalWhite, whiteDebuts } from "./Constants";
@@ -10,7 +10,7 @@ export default class ChessService {
   public chess = new Chess();
   public checkSquares: string[] = []
   public checkmateSquares: string[] = [];
-  public activePlayer: string = ChessConstants.WHITE
+  public activePlayer: Color = ChessConstants.WHITE as Color
 
   turn = () => {
     const returnValue = this.chess.turn();

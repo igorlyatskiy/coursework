@@ -21,6 +21,7 @@ const defaultState: State = {
     board: [ [] ],
     validMoves: [],
     isGameActive: false,
+    activePlayerColor: 'w'
   },
   app: {
     isServerConnected: false,
@@ -46,11 +47,13 @@ export const mainReducer = createReducer(defaultState, {
   },
   [GAME_GET_VALID_MOVES]: (state, { payload }) => {
     state.game.validMoves = state.game.chess.moves(payload);
-    console.log(state.game.validMoves)
+    console.log(state.game.validMoves);
   },
   [GAME_MOVE_FIGURE]: (state, { payload }) => {
     state.game.chess.move(payload);
+    state.game.chess.turn();
     state.game.board = state.game.chess.board();
     state.game.validMoves = [];
+    state.game.activePlayerColor = state.game.chess.activePlayer;
   }
 });

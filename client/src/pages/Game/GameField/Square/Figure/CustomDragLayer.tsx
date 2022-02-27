@@ -1,5 +1,6 @@
 import { useDragLayer, XYCoord } from "react-dnd";
 import { CSSProperties } from "react";
+import { SQUARE_SIZE } from "../../../../../Constants";
 
 export const CustomDragLayer = ({ src }: { src: string }) => {
   const {
@@ -17,12 +18,12 @@ export const CustomDragLayer = ({ src }: { src: string }) => {
   return (
     <div style={layerStyles}>
       <div
-        style={getItemStyles(
+        style={{...getItemStyles(
           currentFileOffset,
-        )}
-      >
-        <img src={src} alt="Figure preview" style={{ userSelect: 'none' }}/>
-      </div>
+        ),
+        background: `url(${src}) no-repeat 50% 50%`
+        }}
+      />
     </div>
   );
 };
@@ -54,6 +55,7 @@ function getItemStyles(
   return {
     transform,
     WebkitTransform: transform,
-    background: "transparent",
+    width: SQUARE_SIZE,
+    height: SQUARE_SIZE
   };
 }

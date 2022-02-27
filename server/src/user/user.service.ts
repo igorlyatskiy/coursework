@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { UserRepository } from './user.repository';
-import { GoogleUserData } from './user.entity';
+import { GoogleUserData, UserEntity } from './user.entity';
+import { UpdateUserDto } from './dto/updateUser.dto';
 
 @Injectable()
 export class UserService {
@@ -18,5 +19,9 @@ export class UserService {
   async createUser(userData: GoogleUserData) {
     const data = await this.userRepository.createUser(userData);
     return data;
+  }
+
+  async updateUser(updateUserDto: UpdateUserDto, user: UserEntity) {
+    const data = await this.userRepository.updateUser(updateUserDto, user);
   }
 }

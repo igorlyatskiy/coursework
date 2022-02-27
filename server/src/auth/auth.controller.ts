@@ -56,6 +56,7 @@ export class AuthController {
       firstName: user.firstName,
       lastName: user.lastName,
       avatar: user.avatar,
+      username: user.username,
     };
   }
 }

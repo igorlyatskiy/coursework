@@ -16,6 +16,7 @@ import { RootReducer } from "./redux";
 import LoadingPage from "./pages/Helpers/Loading/Loading";
 import { approveStartGame, connectApp, startGame } from "./redux/main/actions";
 import RoomsPage from "./pages/Rooms/Rooms";
+import SettingsPage from "./pages/Settings/Settings";
 
 const { Content } = Layout;
 
@@ -51,6 +52,7 @@ export default function App() {
             <Route path='/' element={<HomePage/>}/>
             <Route path='/rooms' element={<RoomsPage/>}/>
             <Route path='/game/:gameId' element={<GamePage/>}/>
+            <Route path='/settings' element={<SettingsPage/>}/>
             <Route path="*" element={<NotFoundPage/>}/>
           </Routes>
           : <LoadingPage text="Connecting to the app"/>

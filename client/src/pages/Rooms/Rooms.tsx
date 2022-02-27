@@ -4,11 +4,12 @@ import { Button,  Table, Tag, Typography } from 'antd';
 
 import CreateRoomModal from "./CreateRoomModal";
 import api from "../../api/api";
+import withSession from "../../components/WithSession";
 
 const { Link } = Typography;
 
 let searchInput: any;
-export default function RoomsPage() {
+function RoomsPage() {
   const [ isCreateRoomModalVisible, setCreateRoomModalVisibility ] = useState(false);
   const [ rooms, setRooms ] = useState([]);
 
@@ -50,7 +51,7 @@ export default function RoomsPage() {
       key: 'level',
       render: (levels: string[]) => {
         return <>
-          {levels.map((item) => <Tag color={getColor(item)}>{item}</Tag>)}
+          {levels.map((item) => <Tag key={item} color={getColor(item)}>{item}</Tag>)}
         </>
       }
     },
@@ -77,3 +78,5 @@ export default function RoomsPage() {
                      setRooms={setRooms}/>
   </>
 }
+
+export default withSession(RoomsPage)

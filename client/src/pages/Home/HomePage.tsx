@@ -4,8 +4,9 @@ import { FireTwoTone, PlaySquareTwoTone, SettingTwoTone, ThunderboltTwoTone } fr
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { startGame } from "../../redux/main/actions";
+import withSession from "../../components/WithSession";
 
-export default function HomePage() {
+function HomePage() {
   const dispatch = useDispatch();
   const data = [
     {
@@ -54,3 +55,5 @@ export default function HomePage() {
     </Col>
   </Row>
 }
+
+export default withSession(HomePage)

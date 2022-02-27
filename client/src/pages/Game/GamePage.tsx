@@ -8,8 +8,9 @@ import { State } from "../../redux/main/type";
 import GameField from "./GameField/GameField";
 import LoadingPage from "../Helpers/Loading/Loading";
 import { startGame } from "../../redux/main/actions";
+import withSession from "../../components/WithSession";
 
-export default function GamePage() {
+function GamePage() {
   const { game }: State = useSelector((root: RootReducer) => root.mainReducer);
   const { gameId } = useParams()
   const dispatch = useDispatch();
@@ -29,6 +30,6 @@ export default function GamePage() {
         : <LoadingPage text='Checking all settings'/>
     }
   </>
-
-
 }
+
+export default withSession(GamePage)

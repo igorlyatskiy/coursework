@@ -25,6 +25,10 @@ class Api {
   async createRoom(roomName: string) {
     return await this.axiosInstance.post('/rooms', { name: roomName });
   }
+
+  async updateUser(username: string) {
+    return this.axiosInstance.put('/user', { username })
+  }
 }
 
 const apiInstance = new Api();

@@ -9,6 +9,8 @@ export enum FIGURES_COLORS_NAMES {
   black = 'b'
 }
 
+export const SQUARE_SIZE = 100
+
 export enum FIGURES_NAMES {
   BISHOP = 'b',
   KING = 'k',
