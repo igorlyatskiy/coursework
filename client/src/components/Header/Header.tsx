@@ -1,10 +1,13 @@
 import React from "react";
-import { Avatar, Button, Dropdown, Layout, Menu, Space, Typography } from "antd";
+import { Avatar, Button, Dropdown, Layout, Menu, Typography } from "antd";
 import { useNavigate } from 'react-router-dom';
 import { State } from "../../redux/main/type";
 import { useSelector } from "react-redux";
 import { RootReducer } from "../../redux";
-import { EditOutlined, EyeOutlined, GoogleOutlined, LogoutOutlined, SolutionOutlined } from "@ant-design/icons";
+import {
+  LogoutOutlined,
+  UserOutlined
+} from "@ant-design/icons";
 import api from "../../api/api";
 
 
@@ -43,7 +46,7 @@ function HeaderComponent() {
       {app.session &&
       <Dropdown overlay={menu} trigger={[ 'click' ]}>
         <Button type="dashed" size="large" style={{ display: "flex", alignItems: "center" }}>
-          <Avatar src={app.session.avatar} size={24}/>
+          <Avatar src={app.session.avatar} size={24} icon={<UserOutlined/>}/>
           <span style={{ marginLeft: '12px' }}>{app.session.firstName} {app.session.lastName}</span>
         </Button>
       </Dropdown>
