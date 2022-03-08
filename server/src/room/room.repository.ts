@@ -21,12 +21,20 @@ export class RoomRepository extends Repository<RoomEntity> {
       },
     });
     const room = new RoomEntity(name, creator);
-    await room.save();
+    return room.save();
+  }
+
+  async getRoomById(roomId: string) {
+    const data = await this.findOne({
+      where: { id: roomId },
+      relations: ['creator'],
+    });
+    return data;
   }
 
   async getAll() {
     const data = await this.find({
-      where: { status: true },
+      where: { isRoomActive: true },
       relations: ['creator'],
     });
     return data.map((item, index) => ({
@@ -38,5 +46,9 @@ export class RoomRepository extends Repository<RoomEntity> {
         item.creator?.username ??
         `${item.creator?.firstName} ${item.creator?.lastName}`,
     }));
+  }
+
+  async deleteById(roomId: string) {
+    await this.delete({ id: roomId });
   }
 }

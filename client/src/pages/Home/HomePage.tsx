@@ -1,9 +1,8 @@
 import React from "react";
 import { Col, List, Row, Layout } from "antd";
-import { FireTwoTone, PlaySquareTwoTone, SettingTwoTone, ThunderboltTwoTone } from "@ant-design/icons";
+import { FireTwoTone, PlaySquareTwoTone, SettingTwoTone, StarTwoTone, ThunderboltTwoTone } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { startGame } from "../../redux/main/actions";
 import withSession from "../../components/WithSession";
 
 function HomePage() {
@@ -13,19 +12,22 @@ function HomePage() {
       icon: <FireTwoTone twoToneColor="orange"/>,
       text: 'Game.',
       path: '/rooms',
-      action: () => {
-
-      },
+      action: () => {},
     },
+    // {
+    //   icon: <PlaySquareTwoTone twoToneColor='red'/>,
+    //   text: 'Replays.',
+    //   path: '/replays'
+    // },
     {
-      icon: <PlaySquareTwoTone twoToneColor='red'/>,
-      text: 'Replays.',
-      path: '/replays'
-    },
-    {
-      icon: <ThunderboltTwoTone twoToneColor='blue'/>,
+      icon: <ThunderboltTwoTone twoToneColor='red'/>,
       text: 'Online.',
       path: '/online'
+    },
+    {
+      icon: <StarTwoTone twoToneColor='#FFBF00	'/>,
+      text: 'Top.',
+      path: '/top',
     },
     {
       icon: <SettingTwoTone twoToneColor='gray'/>,

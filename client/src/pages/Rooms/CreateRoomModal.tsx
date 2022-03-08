@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Button, Form, Input, message, Modal } from "antd";
+
 import api from "../../api/api";
+import { useNavigate } from "react-router-dom";
 
 interface CreateRoomModalProps {
   isModalVisible: boolean;
@@ -11,16 +13,22 @@ interface CreateRoomModalProps {
 
 export default function CreateRoomModal({ isModalVisible, handleOk, handleCancel, setRooms }: CreateRoomModalProps) {
   const [ form ] = Form.useForm();
+  const navigate = useNavigate();
+  const goToGamePage = useCallback((gameId: string) => navigate(`/game/${gameId}`, { replace: true }), [ navigate ]);
 
   const handleFormSubmit = async (event: { name: string }) => {
     handleOk();
     form.resetFields();
     try {
       const { data } = await api.createRoom(event.name);
-      setRooms(data);
+      const { rooms, newRoomId } = data;
+      setRooms(rooms);
+      if (newRoomId) {
+        goToGamePage(newRoomId);
+      }
       message.success('Room has been created');
     } catch (error) {
-      message.error('An error occurred');
+      message.error("Can't create a room");
     }
   }
 

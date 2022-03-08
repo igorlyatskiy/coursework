@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Layout } from 'antd';
+import { Layout, message } from 'antd';
 import { useParams } from "react-router-dom";
 
 import { RootReducer } from "../../redux";
 import { State } from "../../redux/main/type";
 import GameField from "./GameField/GameField";
 import LoadingPage from "../Helpers/Loading/Loading";
-import { startGame } from "../../redux/main/actions";
+import { joinGame, leaveGame } from "../../redux/main/actions";
 import withSession from "../../components/WithSession";
 
 function GamePage() {
@@ -15,19 +15,27 @@ function GamePage() {
   const { gameId } = useParams()
   const dispatch = useDispatch();
 
+  const { isGameActive } = game;
+
   useEffect(() => {
     if (gameId) {
-      dispatch(startGame(gameId))
+      dispatch(joinGame(gameId))
     }
-  }, [])
+
+    return () => {
+      if (gameId) {
+        dispatch(leaveGame(gameId));
+      }
+    }
+  }, [ gameId ])
 
   return <>
     {
-      game.isGameActive
+      isGameActive
         ? <Layout>
           <GameField board={game.board}/>
         </Layout>
-        : <LoadingPage text='Checking all settings'/>
+        : <LoadingPage text='Waiting for the opponent'/>
     }
   </>
 }

@@ -14,6 +14,7 @@ export default () => ({
     host: process.env.APP_HOST || 'localhost',
     port: process.env.APP_PORT || 8080,
     admins: JSON.parse(process.env.APP_ADMINS),
+    isDev: process.env.NODE_ENV === 'development',
   },
   auth: {
     google: {

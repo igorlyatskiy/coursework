@@ -5,7 +5,7 @@ import { GameEntity } from './game.entity';
 
 @EntityRepository(GameEntity)
 export class GameRepository extends Repository<GameEntity> {
-  private logger = new Logger('UsersRepository');
+  private logger = new Logger('GameRepository');
 
   async getRoomById(id: string) {
     this.logger.log(`Getting room by id [${id}]`);

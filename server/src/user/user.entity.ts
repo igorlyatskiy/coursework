@@ -60,4 +60,7 @@ export class UserEntity extends BaseEntity {
 
   @Column({ nullable: true })
   avatar: string;
+
+  @Column({ default: true })
+  isActive: boolean;
 }

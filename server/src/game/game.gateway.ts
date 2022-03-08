@@ -10,6 +10,7 @@ import { Logger, UseGuards } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 
 import { GameService } from './game.service';
+import { RoomService } from '../room/room.service';
 
 @WebSocketGateway({
   cors: {
@@ -19,7 +20,10 @@ import { GameService } from './game.service';
 export class GameGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private gameService: GameService) {}
+  constructor(
+    private gameService: GameService,
+    private roomService: RoomService,
+  ) {}
 
   @WebSocketServer()
   io: Server;
@@ -28,9 +32,33 @@ export class GameGateway
 
   @SubscribeMessage('joinGame')
   async joinGame(client: Socket, gameId: string): Promise<void> {
-    this.logger.log('Client joined the game', gameId);
+    this.logger.log(`Player joined the room ${gameId}`);
     const gameStatus = await this.gameService.checkGameStatus(gameId);
-    this.io.emit(gameStatus ? 'approveGameJoin' : 'denyGameJoin');
+
+    const roomPlayers = Array.from(
+      this.io.sockets.adapter.rooms.get(gameId) || [],
+    );
+
+    if (gameStatus && roomPlayers.length < 2) {
+      client.join(gameId);
+    } else {
+      client.emit('denyGameJoin');
+    }
+
+    if (roomPlayers.length === 1) {
+      this.logger.log(`[${gameId}]: game started`);
+      this.io.to(gameId).emit('approveGameJoin');
+    }
+  }
+
+  @SubscribeMessage('leaveGame')
+  async leaveGame(client: Socket, gameId: string): Promise<void> {
+    await this.roomService.deleteRoom(gameId);
+
+    // TODO: If game was created.
+    this.io.to(gameId).emit('leaveGame');
+
+    this.io.socketsLeave(gameId);
   }
 
   afterInit(server: Server) {

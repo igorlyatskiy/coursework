@@ -14,9 +14,10 @@ import { wsIo } from "./redux/main/reducer";
 import { State } from "./redux/main/type";
 import { RootReducer } from "./redux";
 import LoadingPage from "./pages/Helpers/Loading/Loading";
-import { approveStartGame, connectApp, startGame } from "./redux/main/actions";
+import { approveStartGame, connectApp } from "./redux/main/actions";
 import RoomsPage from "./pages/Rooms/Rooms";
 import SettingsPage from "./pages/Settings/Settings";
+import TopUsersPage from "./pages/Top/TopUsers";
 
 const { Content } = Layout;
 
@@ -39,7 +40,12 @@ export default function App() {
 
     wsIo.on('denyGameJoin', () => {
       navigate('/rooms');
-      message.warning('Somebody has already joined this room');
+      message.warning('Somebody has already joined this game');
+    })
+
+    wsIo.on('leaveGame', ()=>{
+      navigate('/rooms');
+      message.info('Game was deleted. Reason: one of players left it.');
     })
   }, [])
 
@@ -53,6 +59,7 @@ export default function App() {
             <Route path='/rooms' element={<RoomsPage/>}/>
             <Route path='/game/:gameId' element={<GamePage/>}/>
             <Route path='/settings' element={<SettingsPage/>}/>
+            <Route path='/top' element={<TopUsersPage/>}/>
             <Route path="*" element={<NotFoundPage/>}/>
           </Routes>
           : <LoadingPage text="Connecting to the app"/>

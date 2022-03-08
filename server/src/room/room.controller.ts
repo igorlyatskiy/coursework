@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { RoomService } from './room.service';
@@ -16,5 +24,11 @@ export class RoomController {
   @Post('rooms')
   createRoom(@Body('name') roomName: string, @Req() req) {
     return this.roomService.createRoom(roomName, req.user.email);
+  }
+
+  // Not in use now.
+  @Delete('rooms/:roomId')
+  deleteRoom(@Req() req) {
+    return this.roomService.deleteRoom(req.params?.roomId);
   }
 }

@@ -78,3 +78,18 @@ const constantsInstance = new Constants();
 export default constantsInstance
 
 export const getSquare = (rowIndex: number, colIndex: number) => constantsInstance.letters[colIndex] + constantsInstance.numbers[rowIndex]
+
+export const getColor = (level: string) => {
+  switch (level) {
+    case 'Beginner':
+      return 'green';
+    case 'Champion':
+      return 'purple';
+    case 'Hero':
+      return 'orange';
+    case 'Admin':
+      return 'black';
+    default:
+      return 'gray'
+  }
+};

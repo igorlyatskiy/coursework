@@ -29,6 +29,15 @@ class Api {
   async updateUser(username: string) {
     return this.axiosInstance.put('/user', { username })
   }
+
+  async deleteRoom(roomId: string) {
+    return await this.axiosInstance.delete(`/rooms/${roomId}`);
+  }
+
+  async getTopUsers() {
+    const { data } = await this.axiosInstance.get('/top');
+    return data;
+  }
 }
 
 const apiInstance = new Api();

@@ -11,6 +11,7 @@ export interface Session {
   lastName: string;
   avatar: string;
   username: string;
+  userId: string;
 }
 
 let sessionCache: Session | undefined;
@@ -24,6 +25,7 @@ export function getSession(dispatch: any) {
         lastName: data.lastName,
         avatar: data.avatar,
         username: data.username,
+        userId: data.userId,
       }
       sessionCache = sessionData;
       dispatch(setSession(sessionData));

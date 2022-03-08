@@ -7,8 +7,8 @@ import {
   APP_SET_SESSION,
   GAME_APPROVE_START,
   GAME_GET_VALID_MOVES,
+  GAME_JOIN_GAME, GAME_LEAVE_GAME,
   GAME_MOVE_FIGURE,
-  GAME_START_GAME
 } from "./actions";
 import { State } from "./type";
 
@@ -21,7 +21,8 @@ const defaultState: State = {
     board: [ [] ],
     validMoves: [],
     isGameActive: false,
-    activePlayerColor: 'w'
+    activePlayerColor: 'w',
+    roomId: null,
   },
   app: {
     isServerConnected: false,
@@ -36,11 +37,15 @@ export const mainReducer = createReducer(defaultState, {
   [APP_SET_SESSION]: (state, { payload }) => {
     state.app.session = payload;
   },
-  [GAME_START_GAME]: (state, { payload }) => {
+  [GAME_JOIN_GAME]: (state, { payload }) => {
     state.game.chess.reset();
     state.game.board = state.game.chess.board();
     state.game.validMoves = [];
     wsIo.emit('joinGame', payload);
+  },
+  [GAME_LEAVE_GAME]: (state, {payload})=>{
+    wsIo.emit('leaveGame', payload);
+    state.game.isGameActive = false;
   },
   [GAME_APPROVE_START]: (state) => {
     state.game.isGameActive = true;

@@ -36,5 +36,5 @@ export class RoomEntity extends BaseEntity {
   creator;
 
   @Column({ default: true })
-  status: boolean;
+  isRoomActive: boolean;
 }

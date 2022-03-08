@@ -22,6 +22,22 @@ export class UserService {
   }
 
   async updateUser(updateUserDto: UpdateUserDto, user: UserEntity) {
-    const data = await this.userRepository.updateUser(updateUserDto, user);
+    return this.userRepository.updateUser(updateUserDto, user);
+  }
+
+  async getTopUsers() {
+    const data = await this.userRepository.getTopUsers();
+    return data.map(this.getPublicUserData);
+  }
+
+  getPublicUserData(user: UserEntity) {
+    return {
+      username: user.username
+        ? user.username
+        : `${user.firstName} ${user.lastName}`,
+      score: user.score,
+      avatar: user.avatar,
+      levels: user.levels,
+    };
   }
 }

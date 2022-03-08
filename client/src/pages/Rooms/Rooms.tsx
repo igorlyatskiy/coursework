@@ -5,6 +5,7 @@ import { Button,  Table, Tag, Typography } from 'antd';
 import CreateRoomModal from "./CreateRoomModal";
 import api from "../../api/api";
 import withSession from "../../components/WithSession";
+import { getColor } from "../../Constants";
 
 const { Link } = Typography;
 
@@ -18,21 +19,6 @@ function RoomsPage() {
       setRooms(roomsData);
     })
   }, []);
-
-  const getColor = (level: string) => {
-    switch (level) {
-      case 'Beginner':
-        return 'green';
-      case 'Champion':
-        return 'purple';
-      case 'Hero':
-        return 'orange';
-      case 'Admin':
-        return 'black';
-      default:
-        return 'gray'
-    }
-  };
 
   const columns = [
     {

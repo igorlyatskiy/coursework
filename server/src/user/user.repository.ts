@@ -7,6 +7,7 @@ import { UpdateUserDto } from './dto/updateUser.dto';
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
   private logger = new Logger('UserRepository');
+  private readonly TOP_USERS_LIMIT = 50;
 
   async getByEmail(email: string) {
     return UserEntity.findOne({ email });
@@ -20,5 +21,17 @@ export class UserRepository extends Repository<UserEntity> {
 
   async updateUser(updateUserDto: UpdateUserDto, user: UserEntity) {
     await UserEntity.update({ id: user.id }, updateUserDto);
+  }
+
+  async getTopUsers() {
+    return UserEntity.find({
+      take: this.TOP_USERS_LIMIT,
+      order: {
+        score: 'DESC',
+      },
+      where: {
+        isActive: true,
+      },
+    });
   }
 }
