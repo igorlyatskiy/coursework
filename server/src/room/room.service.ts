@@ -9,6 +9,10 @@ export class RoomService {
     @InjectRepository(RoomRepository) private roomRepository: RoomRepository,
   ) {}
 
+  async getRoomById(roomId: string) {
+    return this.roomRepository.getRoomById(roomId);
+  }
+
   async getAllActiveRooms() {
     return this.roomRepository.getAll();
   }

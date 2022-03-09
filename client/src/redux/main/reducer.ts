@@ -1,5 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
+import { message } from "antd";
 
 import ChessService from "../../chess.js/chess";
 import {
@@ -8,7 +9,7 @@ import {
   GAME_APPROVE_START,
   GAME_GET_VALID_MOVES,
   GAME_JOIN_GAME, GAME_LEAVE_GAME,
-  GAME_MOVE_FIGURE,
+  GAME_MOVE_FIGURE, ONLINE_MOVE_OPPONENT_FIGURE,
 } from "./actions";
 import { State } from "./type";
 
@@ -21,7 +22,9 @@ const defaultState: State = {
     board: [ [] ],
     validMoves: [],
     isGameActive: false,
+    isGameFinished: false,
     activePlayerColor: 'w',
+    currentPlayerColor: null,
     roomId: null,
   },
   app: {
@@ -41,14 +44,18 @@ export const mainReducer = createReducer(defaultState, {
     state.game.chess.reset();
     state.game.board = state.game.chess.board();
     state.game.validMoves = [];
+    state.game.roomId = payload;
     wsIo.emit('joinGame', payload);
   },
-  [GAME_LEAVE_GAME]: (state, {payload})=>{
+  [GAME_LEAVE_GAME]: (state, { payload }) => {
     wsIo.emit('leaveGame', payload);
     state.game.isGameActive = false;
   },
-  [GAME_APPROVE_START]: (state) => {
+  [GAME_APPROVE_START]: (state, { payload }) => {
     state.game.isGameActive = true;
+    const isWhite = state?.app?.session?.userId === payload.whitePlayer;
+    state.game.currentPlayerColor = isWhite ? 'w' : 'b';
+    message.info(`You are playing as ${isWhite ? 'white' : 'black'}`);
   },
   [GAME_GET_VALID_MOVES]: (state, { payload }) => {
     state.game.validMoves = state.game.chess.moves(payload);
@@ -60,5 +67,23 @@ export const mainReducer = createReducer(defaultState, {
     state.game.board = state.game.chess.board();
     state.game.validMoves = [];
     state.game.activePlayerColor = state.game.chess.activePlayer;
+    state.game.isGameFinished = !state.game.chess.isGameActive()
+    if (state.game.isGameFinished) {
+      message.success("Game is finished!")
+    }
+    wsIo.emit('moveFigure', { ...payload, gameId: state.game.roomId, isGameFinished: state.game.isGameFinished });
+  },
+  [ONLINE_MOVE_OPPONENT_FIGURE]: (state, { payload }) => {
+    const { move, isGameFinished } = payload;
+    if (state.game.chess.move(move)) {
+      state.game.chess.turn();
+      state.game.board = state.game.chess.board();
+      state.game.validMoves = [];
+      state.game.activePlayerColor = state.game.chess.activePlayer;
+      state.game.isGameFinished = isGameFinished;
+      if (state.game.isGameFinished) {
+        message.error("Game is finished!")
+      }
+    }
   }
 });

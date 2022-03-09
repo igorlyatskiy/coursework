@@ -3,13 +3,20 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  PrimaryGeneratedColumn,
+  ManyToOne,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserEntity } from '../user/user.entity';
 
 @Entity({ name: 'game' })
 export class GameEntity extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  constructor(roomId: string) {
+    super();
+    this.id = roomId;
+  }
+
+  @PrimaryColumn()
   id: string;
 
   @CreateDateColumn()
@@ -17,4 +24,7 @@ export class GameEntity extends BaseEntity {
 
   @UpdateDateColumn()
   updatedDate: string;
+
+  @ManyToOne(() => UserEntity)
+  whitePlayer: UserEntity;
 }

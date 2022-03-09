@@ -15,6 +15,8 @@ export const GAME_DENY_START = 'GAME_DENY_START';
 export const GAME_GET_VALID_MOVES = 'GAME_GET_VALID_MOVES'
 export const GAME_MOVE_FIGURE = 'GAME_MOVE_FIGURE'
 
+export const ONLINE_MOVE_OPPONENT_FIGURE = 'ONLINE_MOVE_OPPONENT_FIGURE'
+
 
 export const connectApp = createAction<void, string>(APP_CONNECT);
 export const setSession = createAction<Session, string>(APP_SET_SESSION);
@@ -22,8 +24,10 @@ export const setSession = createAction<Session, string>(APP_SET_SESSION);
 export const joinGame = createAction<string, string>(GAME_JOIN_GAME);
 export const leaveGame = createAction<string, string>(GAME_LEAVE_GAME)
 
-export const approveStartGame = createAction<void, string>(GAME_APPROVE_START);
+// TODO: Remove any types.
+export const approveStartGame = createAction<any, string>(GAME_APPROVE_START);
 export const denyStartGame = createAction<void, string>(GAME_DENY_START);
 
 export const getValidMoves = createAction<string, string>(GAME_GET_VALID_MOVES)
 export const moveFigure = createAction<PartialMove, string>(GAME_MOVE_FIGURE);
+export const moveOpponentFigure = createAction<PartialMove, string>(ONLINE_MOVE_OPPONENT_FIGURE)

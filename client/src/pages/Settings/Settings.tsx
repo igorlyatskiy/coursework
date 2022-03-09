@@ -31,8 +31,6 @@ function SettingsPage() {
     }
   }
 
-  console.log(username)
-
   return <>
     {isSessionActive &&
     <>

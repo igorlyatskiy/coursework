@@ -7,7 +7,7 @@ import { GameEntity } from './game.entity';
 export class GameRepository extends Repository<GameEntity> {
   private logger = new Logger('GameRepository');
 
-  async getRoomById(id: string) {
+  async getGameById(id: string) {
     this.logger.log(`Getting room by id [${id}]`);
 
     return await this.find({
@@ -15,5 +15,9 @@ export class GameRepository extends Repository<GameEntity> {
         id,
       },
     });
+  }
+
+  async saveNewGame(game: GameEntity) {
+    await this.save(game);
   }
 }

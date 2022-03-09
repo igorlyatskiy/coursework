@@ -13,6 +13,10 @@ export class UserRepository extends Repository<UserEntity> {
     return UserEntity.findOne({ email });
   }
 
+  getById(id: string) {
+    return UserEntity.findOne({ id });
+  }
+
   async createUser(userData: GoogleUserData) {
     const user = new UserEntity(userData);
     await user.save();

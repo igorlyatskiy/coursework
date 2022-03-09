@@ -46,9 +46,23 @@ export class GameGateway
     }
 
     if (roomPlayers.length === 1) {
+      const { whitePlayer } = await this.gameService.startGame(gameId);
       this.logger.log(`[${gameId}]: game started`);
-      this.io.to(gameId).emit('approveGameJoin');
+      this.io.to(gameId).emit('approveGameJoin', { whitePlayer });
     }
+  }
+
+  @SubscribeMessage('moveFigure')
+  async moveFigure(client: Socket, payload: any): Promise<void> {
+    const move = {
+      from: payload.from,
+      to: payload.to,
+      promotion: payload.promotion,
+    };
+    const { gameId, isGameFinished } = payload;
+    client.broadcast
+      .to(gameId)
+      .emit('moveOpponentFigure', { move, isGameFinished });
   }
 
   @SubscribeMessage('leaveGame')
@@ -56,7 +70,7 @@ export class GameGateway
     await this.roomService.deleteRoom(gameId);
 
     // TODO: If game was created.
-    this.io.to(gameId).emit('leaveGame');
+    client.broadcast.to(gameId).emit('leaveGame');
 
     this.io.socketsLeave(gameId);
   }

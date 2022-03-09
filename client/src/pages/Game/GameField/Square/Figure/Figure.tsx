@@ -27,23 +27,24 @@ export default function Figure({ elementIndex, rowIndex, element }: FigureProps)
   const squareName = getSquare(rowIndex, elementIndex)
   const figureSvgSrc = useFigure({ element });
 
-  const { activePlayerColor } = game;
+  const { activePlayerColor, currentPlayerColor } = game;
+
 
   const [ { isDragging, canDrag }, drag, dragPreview ] = useDrag(() => ({
     type: 'figure',
     item: { square: squareName },
     canDrag: () => {
-      const dragStatus = checkDrag(game.chess.moves, squareName);
+      const dragStatus = (checkDrag(game.chess.moves, squareName) && activePlayerColor === currentPlayerColor);
       if (dragStatus) {
         dispatch(getValidMoves(squareName));
       }
       return dragStatus
     },
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-      canDrag: checkDrag(game.chess.moves, squareName)
+      isDragging: monitor.isDragging(),
+      canDrag: (checkDrag(game.chess.moves, squareName) && activePlayerColor === currentPlayerColor)
     }),
-  }))
+  }), [activePlayerColor, currentPlayerColor])
 
   useEffect(() => {
     dragPreview(getEmptyImage(), { captureDraggingState: true });

@@ -51,4 +51,13 @@ export class RoomRepository extends Repository<RoomEntity> {
   async deleteById(roomId: string) {
     await this.delete({ id: roomId });
   }
+
+  async updateRoom(roomId: string, newRoom: RoomEntity) {
+    await this.update(
+      {
+        id: roomId,
+      },
+      newRoom,
+    );
+  }
 }

@@ -9,7 +9,9 @@ export interface State {
     board: Board,
     validMoves: string[],
     isGameActive: boolean,
+    isGameFinished: boolean,
     activePlayerColor: Color,
+    currentPlayerColor: Color | null,
     roomId: string | null,
   },
   app: {
