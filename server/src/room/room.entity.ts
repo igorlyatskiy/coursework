@@ -37,6 +37,10 @@ export class RoomEntity extends BaseEntity {
   @JoinColumn({ name: 'creatorId' })
   creator;
 
+  @ManyToOne(() => UserEntity, { nullable: true })
+  @JoinColumn({ name: 'guestPlayerId' })
+  guestPlayer;
+
   @Column({ default: true })
   isRoomActive: boolean;
 

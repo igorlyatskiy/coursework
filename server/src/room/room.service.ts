@@ -2,6 +2,8 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { RoomRepository } from './room.repository';
+import { UserEntity } from '../user/user.entity';
+import { RoomEntity } from './room.entity';
 
 @Injectable()
 export class RoomService {
@@ -31,5 +33,9 @@ export class RoomService {
 
   async deleteRoom(roomId: string) {
     await this.roomRepository.deleteById(roomId);
+  }
+
+  async updateRoom(roomId: string, room: RoomEntity) {
+    await this.roomRepository.updateRoom(roomId, room);
   }
 }

@@ -16,7 +16,10 @@ export class AuthService {
       return null;
     }
 
-    return this.jwtService.createToken(req.user);
+    return this.jwtService.createToken({
+      id: req.user.id,
+      email: req.user.email,
+    });
   }
 
   createAuthUser(data: any) {

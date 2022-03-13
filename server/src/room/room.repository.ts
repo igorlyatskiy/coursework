@@ -27,7 +27,7 @@ export class RoomRepository extends Repository<RoomEntity> {
   async getRoomById(roomId: string) {
     const data = await this.findOne({
       where: { id: roomId },
-      relations: ['creator'],
+      relations: ['creator', 'guestPlayer'],
     });
     return data;
   }
@@ -35,7 +35,7 @@ export class RoomRepository extends Repository<RoomEntity> {
   async getAll() {
     const data = await this.find({
       where: { isRoomActive: true },
-      relations: ['creator'],
+      relations: ['creator', 'guestPlayer'],
     });
     return data.map((item, index) => ({
       key: index,
@@ -49,15 +49,20 @@ export class RoomRepository extends Repository<RoomEntity> {
   }
 
   async deleteById(roomId: string) {
-    await this.delete({ id: roomId });
+    await this.update(
+      { id: roomId },
+      {
+        isRoomActive: false,
+      },
+    );
   }
 
-  async updateRoom(roomId: string, newRoom: RoomEntity) {
+  async updateRoom(roomId: string, newRoomData: RoomEntity) {
     await this.update(
       {
         id: roomId,
       },
-      newRoom,
+      newRoomData,
     );
   }
 }

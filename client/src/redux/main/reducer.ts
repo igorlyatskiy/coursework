@@ -1,6 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 import { message } from "antd";
+import Cookies from 'js-cookie';
 
 import ChessService from "../../chess.js/chess";
 import {
@@ -14,7 +15,11 @@ import {
 import { State } from "./type";
 
 const chess = new ChessService()
-export const wsIo = io('http://localhost:8080')
+export const wsIo = io('http://localhost:8080', {
+  extraHeaders: {
+    JWT_TOKEN: Cookies.get('JWT_TOKEN') || ''
+  }
+});
 
 const defaultState: State = {
   game: {
@@ -29,7 +34,8 @@ const defaultState: State = {
   },
   app: {
     isServerConnected: false,
-    session: null
+    session: null,
+    offlineGameType: null
   }
 }
 
@@ -45,10 +51,11 @@ export const mainReducer = createReducer(defaultState, {
     state.game.board = state.game.chess.board();
     state.game.validMoves = [];
     state.game.roomId = payload;
-    wsIo.emit('joinGame', payload);
+    state.game.isGameFinished = false;
+    wsIo.emit('joinGame', { roomId: payload });
   },
   [GAME_LEAVE_GAME]: (state, { payload }) => {
-    wsIo.emit('leaveGame', payload);
+    wsIo.emit('leaveGame', { roomId: payload });
     state.game.isGameActive = false;
   },
   [GAME_APPROVE_START]: (state, { payload }) => {
@@ -68,10 +75,12 @@ export const mainReducer = createReducer(defaultState, {
     state.game.validMoves = [];
     state.game.activePlayerColor = state.game.chess.activePlayer;
     state.game.isGameFinished = !state.game.chess.isGameActive()
+    wsIo.emit('moveFigure', { ...payload, gameId: state.game.roomId, isGameFinished: state.game.isGameFinished });
+
     if (state.game.isGameFinished) {
+      wsIo.emit('finishGame', { gameId: state.game.roomId, winnerId: state?.app?.session?.userId })
       message.success("Game is finished!")
     }
-    wsIo.emit('moveFigure', { ...payload, gameId: state.game.roomId, isGameFinished: state.game.isGameFinished });
   },
   [ONLINE_MOVE_OPPONENT_FIGURE]: (state, { payload }) => {
     const { move, isGameFinished } = payload;

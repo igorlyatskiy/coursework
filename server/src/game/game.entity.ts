@@ -27,4 +27,10 @@ export class GameEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity)
   whitePlayer: UserEntity;
+
+  @ManyToOne(() => UserEntity, { nullable: true })
+  winner: UserEntity;
+
+  @Column()
+  type: string;
 }

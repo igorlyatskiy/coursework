@@ -2,6 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Logger } from '@nestjs/common';
 
 import { GameEntity } from './game.entity';
+import { UserEntity } from '../user/user.entity';
 
 @EntityRepository(GameEntity)
 export class GameRepository extends Repository<GameEntity> {
@@ -19,5 +20,16 @@ export class GameRepository extends Repository<GameEntity> {
 
   async saveNewGame(game: GameEntity) {
     await this.save(game);
+  }
+
+  async setWinner(gameId: string, winner: UserEntity) {
+    return this.update(
+      {
+        id: gameId,
+      },
+      {
+        winner,
+      },
+    );
   }
 }

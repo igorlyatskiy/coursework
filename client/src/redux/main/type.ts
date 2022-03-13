@@ -16,6 +16,7 @@ export interface State {
   },
   app: {
     isServerConnected: boolean,
-    session: Session | null
+    session: Session | null,
+    offlineGameType: 'pvp-offline' | 'ai' | null
   }
 }

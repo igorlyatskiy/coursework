@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GameRepository } from './game.repository';
-import { RoomService } from '../room/room.service';
 import { GameEntity } from './game.entity';
 import { RoomRepository } from '../room/room.repository';
 import { UserRepository } from '../user/user.repository';
@@ -25,6 +24,7 @@ export class GameService {
 
     const game = new GameEntity(room.id);
     game.whitePlayer = room.creator;
+    game.type = 'pvp-online';
     // TODO: For now creator always plays as white player.
 
     room.game = game;
@@ -33,5 +33,10 @@ export class GameService {
     await this.roomRepository.updateRoom(gameId, room);
 
     return { whitePlayer: game.whitePlayer.id };
+  }
+
+  async finishGame(gameId: string, winnerId: string) {
+    const winner = await this.userRepository.getById(winnerId);
+    await this.gameRepository.setWinner(gameId, winner);
   }
 }

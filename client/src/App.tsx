@@ -9,7 +9,7 @@ import HeaderComponent from "./components/Header/Header";
 import './App.css'
 import HomePage from "./pages/Home/HomePage";
 import NotFoundPage from "./pages/Helpers/NotFound/NotFoundPage";
-import GamePage from "./pages/Game/GamePage";
+import OnlineGamePage from "./pages/OnlineGame/GamePage";
 import { wsIo } from "./redux/main/reducer";
 import { State } from "./redux/main/type";
 import { RootReducer } from "./redux";
@@ -18,6 +18,7 @@ import { approveStartGame, connectApp, moveOpponentFigure } from "./redux/main/a
 import RoomsPage from "./pages/Rooms/Rooms";
 import SettingsPage from "./pages/Settings/Settings";
 import TopUsersPage from "./pages/Top/TopUsers";
+import Game from "./pages/Game/Game";
 
 const { Content } = Layout;
 
@@ -42,14 +43,18 @@ export default function App() {
       dispatch(moveOpponentFigure(data))
     })
 
+    wsIo.on('finishGame', () => {
+      message.error("Game is finished!");
+    })
+
     wsIo.on('denyGameJoin', () => {
       navigate('/rooms');
       message.warning('Somebody has already joined this game');
     })
 
-    wsIo.on('leaveGame', ()=>{
+    wsIo.on('leaveGame', () => {
       navigate('/rooms');
-      message.info('Game was deleted. Reason: opponent left it.');
+      message.info('Opponent left the game.');
     })
   }, [])
 
@@ -60,9 +65,9 @@ export default function App() {
         {isServerConnected
           ? <Routes>
             <Route path='/' element={<HomePage/>}/>
-            <Route path='/rooms' element={<RoomsPage/>}/>
+            <Route path='/rooms' element={<Game/>}/>
             <Route path='/online' element={<RoomsPage/>}/>
-            <Route path='/game/:gameId' element={<GamePage/>}/>
+            <Route path='/game/:gameId' element={<OnlineGamePage/>}/>
             <Route path='/settings' element={<SettingsPage/>}/>
             <Route path='/top' element={<TopUsersPage/>}/>
             <Route path="*" element={<NotFoundPage/>}/>

@@ -23,7 +23,7 @@ function GamePage() {
     }
 
     return () => {
-      if (gameId) {
+      if (gameId && !game.isGameFinished) {
         dispatch(leaveGame(gameId));
       }
     }
