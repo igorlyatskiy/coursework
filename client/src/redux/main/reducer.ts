@@ -63,7 +63,6 @@ export const mainReducer = createReducer(defaultState, {
     state.game.chess.reset();
     state.game.board = state.game.chess.board();
     state.game.validMoves = [];
-    state.game.gameId = payload;
     state.game.isGameFinished = false;
     state.game.currentGameType = payload;
     wsIo.emit(`joinGame__${payload}`);
@@ -82,6 +81,7 @@ export const mainReducer = createReducer(defaultState, {
   [OFFLINE_APPROVE_START]: (state, { payload }) => {
     state.game.isGameActive = true;
     state.game.currentPlayerColor = 'w';
+    state.game.gameId = payload.gameId;
     message.info(`White player begins!`);
   },
   [GAME_GET_VALID_MOVES]: (state, { payload }) => {

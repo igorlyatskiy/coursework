@@ -45,9 +45,6 @@ class Constants {
   FIGURE_MOVEMENT_TIME = 300;
   FIGURE_WAITING_TIME = 0;
   NOT_AI_PLAYER_ID = 1;
-  PVP_OFFLINE_NAME = 'pvp-offline'
-  PVP_ONLINE_NAME = 'pvp-online'
-  AI_NAME = 'ai'
 
   letters: string[] = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' ]
   numbers: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
