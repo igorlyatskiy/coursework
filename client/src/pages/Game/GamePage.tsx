@@ -7,7 +7,7 @@ import { RootReducer } from "../../redux";
 import { State } from "../../redux/main/type";
 import GameField from "./GameField/GameField";
 import LoadingPage from "../Helpers/Loading/Loading";
-import { joinGame, leaveGame } from "../../redux/main/actions";
+import { joinOnlineGame, leaveGame } from "../../redux/main/actions";
 import withSession from "../../components/WithSession";
 
 function GamePage() {
@@ -19,7 +19,7 @@ function GamePage() {
 
   useEffect(() => {
     if (gameId) {
-      dispatch(joinGame(gameId))
+      dispatch(joinOnlineGame(gameId))
     }
 
     return () => {

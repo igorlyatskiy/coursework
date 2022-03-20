@@ -7,10 +7,11 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserEntity } from '../user/user.entity';
 
-@Entity({ name: 'game' })
-export class GameEntity extends BaseEntity {
+import { UserEntity } from '../../user/user.entity';
+
+@Entity({ name: 'online_game' })
+export class OnlineGameEntity extends BaseEntity {
   constructor(roomId: string) {
     super();
     this.id = roomId;
@@ -30,7 +31,4 @@ export class GameEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, { nullable: true })
   winner: UserEntity;
-
-  @Column()
-  type: string;
 }

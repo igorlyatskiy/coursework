@@ -6,7 +6,6 @@ import {Session} from "../../components/WithSession";
 export const APP_CONNECT = 'APP_CONNECT_SERVER'
 export const APP_SET_SESSION = 'APP_SET_SESSION'
 
-export const GAME_JOIN_GAME = 'GAME_JOIN_GAME'
 export const GAME_LEAVE_GAME = 'GAME_LEAVE_GAME'
 
 export const GAME_APPROVE_START = 'GAME_APPROVE_START'
@@ -16,16 +15,24 @@ export const GAME_GET_VALID_MOVES = 'GAME_GET_VALID_MOVES'
 export const GAME_MOVE_FIGURE = 'GAME_MOVE_FIGURE'
 
 export const ONLINE_MOVE_OPPONENT_FIGURE = 'ONLINE_MOVE_OPPONENT_FIGURE'
+export const ONLINE_JOIN_GAME = 'ONLINE_JOIN_GAME'
+
+export const OFFLINE_START_GAME = 'OFFLINE_START_GAME'
+export const OFFLINE_APPROVE_START = 'OFFLINE_APPROVE_START'
 
 
 export const connectApp = createAction<void, string>(APP_CONNECT);
 export const setSession = createAction<Session, string>(APP_SET_SESSION);
 
-export const joinGame = createAction<string, string>(GAME_JOIN_GAME);
+export const joinOnlineGame = createAction<string, string>(ONLINE_JOIN_GAME);
+export const startOfflineGame = createAction<string, string>(OFFLINE_START_GAME);
+
 export const leaveGame = createAction<string, string>(GAME_LEAVE_GAME)
 
 // TODO: Remove any types.
 export const approveStartGame = createAction<any, string>(GAME_APPROVE_START);
+export const approveOfflineGame = createAction<any, string>(OFFLINE_APPROVE_START);
+
 export const denyStartGame = createAction<void, string>(GAME_DENY_START);
 
 export const getValidMoves = createAction<string, string>(GAME_GET_VALID_MOVES)

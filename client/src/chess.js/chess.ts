@@ -3,7 +3,7 @@ import { Chess, Color, PartialMove, Piece } from "chess.ts";
 
 
 import ChessConstants, { bishopEvalBlack, bishopEvalWhite, blackDebuts, evalQueen, kingEvalBlack, kingEvalWhite, knightEval, pawnEvalBlack, pawnEvalWhite, rookEvalBlack, rookEvalWhite, whiteDebuts } from "./Constants";
-import Constants, { FigureData } from "../Constants";
+import Constants, { FIGURES_NAMES } from "../Constants";
 
 
 export default class ChessService {
@@ -1012,24 +1012,24 @@ export default class ChessService {
   }
 
   findBestMove = (chess: Chess) => {
-    // const ANY_BIG_NEGATIVE_NUMBER = -Infinity;
-    // const newGameMoves = chess.moves({ verbose: true });
-    // let bestMove = null;
-    // let bestValue = ANY_BIG_NEGATIVE_NUMBER;
-    //
-    // newGameMoves.forEach((move) => {
-    //   chess.move(move);
-    //   const boardValue = this.minimax(chess, ChessConstants.AI_DEPTH - 1, -Infinity, +Infinity, false)
-    //   chess.undo();
-    //   if (boardValue >= bestValue) {
-    //     bestValue = boardValue;
-    //     bestMove = move
-    //   }
-    // })
-    // return bestMove;
+    const ANY_BIG_NEGATIVE_NUMBER = -Infinity;
+    const newGameMoves = chess.moves({ verbose: true });
+    let bestMove = null;
+    let bestValue = ANY_BIG_NEGATIVE_NUMBER;
+
+    newGameMoves.forEach((move) => {
+      chess.move(move);
+      const boardValue = this.minimax(chess, ChessConstants.AI_DEPTH - 1, -Infinity, +Infinity, false)
+      chess.undo();
+      if (boardValue >= bestValue) {
+        bestValue = boardValue;
+        bestMove = move
+      }
+    })
+    return bestMove;
   }
 
-  getFigurePower = (figure: FigureData, rowIndex: number, colIndex: number) => {
+  getFigurePower = (figure: Piece, rowIndex: number, colIndex: number) => {
     switch (figure.type) {
       case 'p': {
         const pawnEval = figure.color === 'w' ? pawnEvalWhite[rowIndex][colIndex] : pawnEvalBlack[rowIndex][colIndex]
@@ -1063,19 +1063,19 @@ export default class ChessService {
   }
 
   countBoardSituation = (board: (Piece | null)[][]) => {
-    // let sum = 0;
-    // board.forEach((row, rowIndex) => {
-    //   row.forEach((item, colIndex) => {
-    //     if (item !== null) {
-    //       if (item.color === this.activePlayer) {
-    //         sum += this.getFigurePower(item, rowIndex, colIndex) || 0;
-    //       } else {
-    //         sum -= this.getFigurePower(item, rowIndex, colIndex) || 0;
-    //       }
-    //     }
-    //   })
-    // })
-    // return sum;
+    let sum = 0;
+    board.forEach((row, rowIndex) => {
+      row.forEach((item, colIndex) => {
+        if (item !== null) {
+          if (item.color === this.activePlayer) {
+            sum += this.getFigurePower(item, rowIndex, colIndex) || 0;
+          } else {
+            sum -= this.getFigurePower(item, rowIndex, colIndex) || 0;
+          }
+        }
+      })
+    })
+    return sum;
   }
 
   minimax = (chess: Chess, depth: number, alphaParam: number, betaParam: number, maximizingPlayer: boolean) => {
@@ -1119,12 +1119,12 @@ export default class ChessService {
     let returnValue = null;
     this.chess.board().forEach((row, rowIndex) => {
       row.forEach((element, colIndex) => {
-        // if (element?.type === Constants.FIGURES_NAMES.PAWN && element.color === color && isFigureRemoved === false) {
-        //   isFigureRemoved = true;
-        //   const figurePosition = this.getSquareNameByIndex(rowIndex, colIndex);
-        //   this.chess.remove(figurePosition);
-        //   returnValue = figurePosition
-        // }
+        if (element?.type === FIGURES_NAMES.PAWN && element.color === color && !isFigureRemoved) {
+          isFigureRemoved = true;
+          const figurePosition = this.getSquareNameByIndex(rowIndex, colIndex);
+          this.chess.remove(figurePosition);
+          returnValue = figurePosition
+        }
       })
     })
     return returnValue

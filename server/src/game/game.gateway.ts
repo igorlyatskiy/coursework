@@ -9,10 +9,12 @@ import {
 import { Logger, UseGuards } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 
-import { GameService } from './game.service';
+import { OnlineGameService } from './service/onlineGame.service';
 import { RoomService } from '../room/room.service';
 import { WsGuard } from '../auth/guards/ws.guard';
 import { UserEntity } from '../user/user.entity';
+import { GAME_TYPES } from '../Constants';
+import { OfflineGameService } from './service/offlineGame.service';
 
 type JwtAuthData = {
   user: UserEntity;
@@ -27,7 +29,8 @@ export class GameGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
-    private gameService: GameService,
+    private onlineGameService: OnlineGameService,
+    private offlineGameService: OfflineGameService,
     private roomService: RoomService,
   ) {}
 
@@ -37,13 +40,13 @@ export class GameGateway
   private logger: Logger = new Logger('GameGateway');
 
   @UseGuards(WsGuard)
-  @SubscribeMessage('joinGame')
-  async joinGame(
-    client: Socket & { user: UserEntity },
+  @SubscribeMessage(`joinGame__${GAME_TYPES.online}`)
+  async joinOnlineGame(
+    client: Socket,
     { roomId, user }: { roomId: string } & JwtAuthData,
   ): Promise<void> {
     this.logger.log(`Player joined the room ${roomId}`);
-    const gameStatus = await this.gameService.checkGameStatus(roomId);
+    const gameStatus = await this.onlineGameService.checkGameStatus(roomId);
 
     const roomPlayers = Array.from(
       this.io.sockets.adapter.rooms.get(roomId) || [],
@@ -63,14 +66,14 @@ export class GameGateway
     }
 
     if (roomPlayers.length === 1) {
-      const { whitePlayer } = await this.gameService.startGame(roomId);
+      const { whitePlayer } = await this.onlineGameService.startGame(roomId);
       this.logger.log(`[${roomId}]: game started`);
       this.io.to(roomId).emit('approveGameJoin', { whitePlayer });
     }
   }
 
-  @SubscribeMessage('moveFigure')
-  async moveFigure(client: Socket, payload: any): Promise<void> {
+  @SubscribeMessage(`moveFigure__${GAME_TYPES.online}`)
+  async moveOnlineFigure(client: Socket, payload: any): Promise<void> {
     const move = {
       from: payload.from,
       to: payload.to,
@@ -80,17 +83,32 @@ export class GameGateway
     client.broadcast.to(gameId).emit('moveOpponentFigure', { move });
   }
 
-  @SubscribeMessage('finishGame')
-  async finishGame(client: Socket, payload: any) {
+  @SubscribeMessage(`moveFigure__${GAME_TYPES.offline}`)
+  async moveOfflineFigure(client: Socket, payload: any): Promise<void> {
+    //  TODO: Add logic.
+  }
+
+  @SubscribeMessage(`finishGame__${GAME_TYPES.online}`)
+  async finishOnlineGame(client: Socket, payload: any) {
     const { gameId, winnerId } = payload;
 
-    await this.gameService.finishGame(gameId, winnerId);
+    await this.onlineGameService.finishGame(gameId, winnerId);
 
-    client.broadcast.to(gameId).emit('finishGame');
+    client.broadcast.to(gameId).emit(`finishGame__${GAME_TYPES.online}`);
     this.io.socketsLeave(gameId);
   }
 
-  @SubscribeMessage('leaveGame')
+  @SubscribeMessage(`finishGame__${GAME_TYPES.offline}`)
+  async finishOfflineGame(client: Socket, payload: any) {
+    const { gameId, winnerColor } = payload;
+
+    await this.offlineGameService.finishGame(gameId, winnerColor);
+    // TODO: Add finish offline game logic.
+
+    client.broadcast.to(gameId).emit(`finishGame__${GAME_TYPES.offline}`);
+  }
+
+  @SubscribeMessage(`leaveGame__${GAME_TYPES.online}`)
   async leaveGame(
     client: Socket,
     { roomId, user }: { roomId: string } & JwtAuthData,
@@ -102,12 +120,22 @@ export class GameGateway
     if (room?.game) {
       const winnerId =
         room.creator.id === user.id ? room.guestPlayer.id : user.id;
-      await this.gameService.finishGame(roomId, winnerId);
+      await this.onlineGameService.finishGame(roomId, winnerId);
     }
 
     // TODO: If game was created.
     client.broadcast.to(roomId).emit('leaveGame');
     this.io.socketsLeave(roomId);
+  }
+
+  @UseGuards(WsGuard)
+  @SubscribeMessage(`joinGame__${GAME_TYPES.offline}`)
+  async joinPvpOfflineGame(
+    client: Socket,
+    { user }: JwtAuthData,
+  ): Promise<void> {
+    const gameId = await this.offlineGameService.startGame(user);
+    client.emit(`joinGame__${GAME_TYPES.offline}`, { gameId });
   }
 
   afterInit(server: Server) {

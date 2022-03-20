@@ -9,6 +9,12 @@ export enum FIGURES_COLORS_NAMES {
   black = 'b'
 }
 
+export enum GAME_TYPES {
+  online = 'pvp-online',
+  offline = 'pvp-offline',
+  ai = 'ai',
+}
+
 export const SQUARE_SIZE = 100
 
 export enum FIGURES_NAMES {
@@ -18,11 +24,6 @@ export enum FIGURES_NAMES {
   PAWN = 'p',
   QUEEN = 'q',
   ROOK = 'r'
-}
-
-export interface FigureData {
-  type: FIGURES_NAMES,
-  color: Color
 }
 
 interface PlayerData {

@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 
 import { UserEntity } from '../user/user.entity';
-import { GameEntity } from '../game/game.entity';
+import { OnlineGameEntity } from '../game/entity/onlineGame.entity';
 
 @Entity({ name: 'room' })
 export class RoomEntity extends BaseEntity {
@@ -44,10 +44,10 @@ export class RoomEntity extends BaseEntity {
   @Column({ default: true })
   isRoomActive: boolean;
 
-  @OneToOne(() => GameEntity, (game: GameEntity) => game.id, {
+  @OneToOne(() => OnlineGameEntity, (game: OnlineGameEntity) => game.id, {
     onDelete: 'CASCADE',
     nullable: true,
   })
   @JoinColumn({ name: 'gameId' })
-  game: GameEntity;
+  game: OnlineGameEntity;
 }

@@ -11,7 +11,7 @@ function HomePage() {
     {
       icon: <FireTwoTone twoToneColor="orange"/>,
       text: 'Game.',
-      path: '/rooms',
+      path: '/offline',
       action: () => {},
     },
     // {

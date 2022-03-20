@@ -9,16 +9,17 @@ import HeaderComponent from "./components/Header/Header";
 import './App.css'
 import HomePage from "./pages/Home/HomePage";
 import NotFoundPage from "./pages/Helpers/NotFound/NotFoundPage";
-import OnlineGamePage from "./pages/OnlineGame/GamePage";
+import OnlineGamePage from "./pages/Game/GamePage";
 import { wsIo } from "./redux/main/reducer";
 import { State } from "./redux/main/type";
 import { RootReducer } from "./redux";
 import LoadingPage from "./pages/Helpers/Loading/Loading";
-import { approveStartGame, connectApp, moveOpponentFigure } from "./redux/main/actions";
+import { approveOfflineGame, approveStartGame, connectApp, moveOpponentFigure } from "./redux/main/actions";
 import RoomsPage from "./pages/Rooms/Rooms";
 import SettingsPage from "./pages/Settings/Settings";
 import TopUsersPage from "./pages/Top/TopUsers";
-import Game from "./pages/Game/Game";
+import Game from "./pages/OfflineGame/Game";
+import { GAME_TYPES } from "./Constants";
 
 const { Content } = Layout;
 
@@ -39,21 +40,29 @@ export default function App() {
       dispatch(approveStartGame(data))
     })
 
+    wsIo.on(`joinGame__${GAME_TYPES.offline}`, (data) => {
+      dispatch(approveOfflineGame(data));
+      const { gameId } = data;
+      if(gameId) {
+        navigate(`/game/${gameId}`);
+      }
+    });
+
     wsIo.on('moveOpponentFigure', (data) => {
       dispatch(moveOpponentFigure(data))
     })
 
-    wsIo.on('finishGame', () => {
+    wsIo.on(`finishGame__${GAME_TYPES.online}`, () => {
       message.error("Game is finished!");
     })
 
     wsIo.on('denyGameJoin', () => {
-      navigate('/rooms');
+      navigate('/online');
       message.warning('Somebody has already joined this game');
     })
 
     wsIo.on('leaveGame', () => {
-      navigate('/rooms');
+      navigate('/online');
       message.info('Opponent left the game.');
     })
   }, [])
@@ -65,7 +74,7 @@ export default function App() {
         {isServerConnected
           ? <Routes>
             <Route path='/' element={<HomePage/>}/>
-            <Route path='/rooms' element={<Game/>}/>
+            <Route path='/offline' element={<Game/>}/>
             <Route path='/online' element={<RoomsPage/>}/>
             <Route path='/game/:gameId' element={<OnlineGamePage/>}/>
             <Route path='/settings' element={<SettingsPage/>}/>

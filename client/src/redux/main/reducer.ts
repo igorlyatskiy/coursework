@@ -9,10 +9,15 @@ import {
   APP_SET_SESSION,
   GAME_APPROVE_START,
   GAME_GET_VALID_MOVES,
-  GAME_JOIN_GAME, GAME_LEAVE_GAME,
-  GAME_MOVE_FIGURE, ONLINE_MOVE_OPPONENT_FIGURE,
+  GAME_LEAVE_GAME,
+  GAME_MOVE_FIGURE,
+  OFFLINE_APPROVE_START,
+  OFFLINE_START_GAME,
+  ONLINE_JOIN_GAME,
+  ONLINE_MOVE_OPPONENT_FIGURE,
 } from "./actions";
 import { State } from "./type";
+import { GAME_TYPES } from "../../Constants";
 
 const chess = new ChessService()
 export const wsIo = io('http://localhost:8080', {
@@ -30,12 +35,12 @@ const defaultState: State = {
     isGameFinished: false,
     activePlayerColor: 'w',
     currentPlayerColor: null,
-    roomId: null,
+    gameId: null,
+    currentGameType: null,
   },
   app: {
     isServerConnected: false,
     session: null,
-    offlineGameType: null
   }
 }
 
@@ -46,23 +51,38 @@ export const mainReducer = createReducer(defaultState, {
   [APP_SET_SESSION]: (state, { payload }) => {
     state.app.session = payload;
   },
-  [GAME_JOIN_GAME]: (state, { payload }) => {
+  [ONLINE_JOIN_GAME]: (state, { payload }) => {
     state.game.chess.reset();
     state.game.board = state.game.chess.board();
     state.game.validMoves = [];
-    state.game.roomId = payload;
+    state.game.gameId = payload;
     state.game.isGameFinished = false;
-    wsIo.emit('joinGame', { roomId: payload });
+    wsIo.emit(`joinGame__${GAME_TYPES.online}`, { roomId: payload });
+  },
+  [OFFLINE_START_GAME]: (state, { payload }) => {
+    state.game.chess.reset();
+    state.game.board = state.game.chess.board();
+    state.game.validMoves = [];
+    state.game.gameId = payload;
+    state.game.isGameFinished = false;
+    state.game.currentGameType = payload;
+    wsIo.emit(`joinGame__${payload}`);
   },
   [GAME_LEAVE_GAME]: (state, { payload }) => {
-    wsIo.emit('leaveGame', { roomId: payload });
+    wsIo.emit(`leaveGame__${GAME_TYPES.online}`, { roomId: payload });
     state.game.isGameActive = false;
   },
   [GAME_APPROVE_START]: (state, { payload }) => {
     state.game.isGameActive = true;
     const isWhite = state?.app?.session?.userId === payload.whitePlayer;
     state.game.currentPlayerColor = isWhite ? 'w' : 'b';
+    state.game.currentGameType = GAME_TYPES.online;
     message.info(`You are playing as ${isWhite ? 'white' : 'black'}`);
+  },
+  [OFFLINE_APPROVE_START]: (state, { payload }) => {
+    state.game.isGameActive = true;
+    state.game.currentPlayerColor = 'w';
+    message.info(`White player begins!`);
   },
   [GAME_GET_VALID_MOVES]: (state, { payload }) => {
     state.game.validMoves = state.game.chess.moves(payload);
@@ -75,11 +95,31 @@ export const mainReducer = createReducer(defaultState, {
     state.game.validMoves = [];
     state.game.activePlayerColor = state.game.chess.activePlayer;
     state.game.isGameFinished = !state.game.chess.isGameActive()
-    wsIo.emit('moveFigure', { ...payload, gameId: state.game.roomId, isGameFinished: state.game.isGameFinished });
+
+    if (state.game.currentGameType === GAME_TYPES.offline) {
+      state.game.currentPlayerColor = state.game.activePlayerColor;
+    }
+
+    wsIo.emit(`moveFigure__${state.game.currentGameType}`, {
+      ...payload,
+      gameId: state.game.gameId,
+      isGameFinished: state.game.isGameFinished
+    });
 
     if (state.game.isGameFinished) {
-      wsIo.emit('finishGame', { gameId: state.game.roomId, winnerId: state?.app?.session?.userId })
-      message.success("Game is finished!")
+      switch (state.game.currentGameType) {
+        case GAME_TYPES.offline:
+          message.info("Game is finished!")
+          break;
+        default:
+          message.success("Game is finished!")
+      }
+
+      wsIo.emit(`finishGame__${state.game.currentGameType}`, {
+        gameId: state.game.gameId,
+        winnerId: state?.app?.session?.userId,
+        winnerColor: state.game.activePlayerColor,
+      })
     }
   },
   [ONLINE_MOVE_OPPONENT_FIGURE]: (state, { payload }) => {
@@ -91,7 +131,7 @@ export const mainReducer = createReducer(defaultState, {
       state.game.activePlayerColor = state.game.chess.activePlayer;
       state.game.isGameFinished = isGameFinished;
       if (state.game.isGameFinished) {
-        message.error("Game is finished!")
+        message.error("OfflineGame is finished!")
       }
     }
   }

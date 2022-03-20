@@ -1,12 +1,12 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Logger } from '@nestjs/common';
 
-import { GameEntity } from './game.entity';
-import { UserEntity } from '../user/user.entity';
+import { OnlineGameEntity } from '../entity/onlineGame.entity';
+import { UserEntity } from '../../user/user.entity';
 
-@EntityRepository(GameEntity)
-export class GameRepository extends Repository<GameEntity> {
-  private logger = new Logger('GameRepository');
+@EntityRepository(OnlineGameEntity)
+export class OnlineGameRepository extends Repository<OnlineGameEntity> {
+  private logger = new Logger('OnlineGameRepository');
 
   async getGameById(id: string) {
     this.logger.log(`Getting room by id [${id}]`);
@@ -18,7 +18,7 @@ export class GameRepository extends Repository<GameEntity> {
     });
   }
 
-  async saveNewGame(game: GameEntity) {
+  async saveNewGame(game: OnlineGameEntity) {
     await this.save(game);
   }
 

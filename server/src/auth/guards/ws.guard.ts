@@ -6,6 +6,7 @@ import { JwtService } from '../jwt.service';
 @Injectable()
 export class WsGuard implements CanActivate {
   private readonly logger = new Logger('WsGuard');
+
   constructor(
     readonly userService: UserService,
     readonly jwtService: JwtService,
@@ -13,6 +14,11 @@ export class WsGuard implements CanActivate {
 
   async canActivate(context: any) {
     const data = context.switchToWs().getData();
+
+    if (!data) {
+      context.switchToWs().args[context.switchToWs().args.length - 2] = {};
+    }
+
     const JWT_TOKEN = context.args[0].handshake.headers.jwt_token;
 
     if (!JWT_TOKEN) {

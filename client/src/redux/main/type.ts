@@ -1,5 +1,5 @@
 import ChessService from "../../chess.js/chess";
-import { Board } from "../../Constants";
+import { Board, GAME_TYPES } from "../../Constants";
 import { Session } from "../../components/WithSession";
 import { Color } from "chess.ts";
 
@@ -12,11 +12,11 @@ export interface State {
     isGameFinished: boolean,
     activePlayerColor: Color,
     currentPlayerColor: Color | null,
-    roomId: string | null,
+    gameId: string | null,
+    currentGameType: GAME_TYPES | null,
   },
   app: {
     isServerConnected: boolean,
     session: Session | null,
-    offlineGameType: 'pvp-offline' | 'ai' | null
   }
 }
