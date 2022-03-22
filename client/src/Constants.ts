@@ -15,6 +15,8 @@ export enum GAME_TYPES {
   ai = 'ai',
 }
 
+export const FIGURE_MOVING_TIME = 300;
+
 export const SQUARE_SIZE = 100
 
 export enum FIGURES_NAMES {

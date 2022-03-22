@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { Layout, message } from "antd";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
 
 import HeaderComponent from "./components/Header/Header";
 
@@ -26,7 +25,7 @@ import RoomsPage from "./pages/Rooms/Rooms";
 import SettingsPage from "./pages/Settings/Settings";
 import TopUsersPage from "./pages/Top/TopUsers";
 import Game from "./pages/OfflineGame/Game";
-import { GAME_TYPES } from "./Constants";
+import { FIGURE_MOVING_TIME, GAME_TYPES } from "./Constants";
 
 const { Content } = Layout;
 
@@ -50,7 +49,7 @@ export default function App() {
     wsIo.on(`joinGame__${GAME_TYPES.offline}`, (data) => {
       dispatch(approveOfflineGame(data));
       const { gameId } = data;
-      if(gameId) {
+      if (gameId) {
         navigate(`/game/${gameId}`);
       }
     });
@@ -58,7 +57,7 @@ export default function App() {
     wsIo.on(`joinGame__${GAME_TYPES.ai}`, (data) => {
       dispatch(approveAiGame(data));
       const { gameId } = data;
-      if(gameId) {
+      if (gameId) {
         navigate(`/game/${gameId}`);
       }
     });
@@ -67,8 +66,10 @@ export default function App() {
       dispatch(moveOpponentFigure(data))
     })
 
-    wsIo.on('moveAiFigure', ()=>{
-      dispatch(moveAiFigure());
+    wsIo.on('moveAiFigure', () => {
+      setTimeout(() => {
+        dispatch(moveAiFigure());
+      }, FIGURE_MOVING_TIME)
     })
 
     wsIo.on(`finishGame__${GAME_TYPES.online}`, () => {

@@ -14,6 +14,7 @@ export interface State {
     currentPlayerColor: Color | null,
     gameId: string | null,
     currentGameType: GAME_TYPES | null,
+    isFigureMoving: boolean,
   },
   app: {
     isServerConnected: boolean,

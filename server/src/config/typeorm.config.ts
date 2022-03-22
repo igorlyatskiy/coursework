@@ -14,7 +14,9 @@ export default class TypeormConfig {
       synchronize: configService.get('db.sync'),
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
       extra: {
-        trustServerCertificate: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
       },
     };
   }

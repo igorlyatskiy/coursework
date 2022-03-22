@@ -1,7 +1,7 @@
 import axios from "axios";
 
 class Api {
-  baseUrl: string = 'http://localhost:8080'
+  baseUrl: string = process.env.REACT_APP_SERVER_URI as string;
   axiosInstance = axios.create({ baseURL: this.baseUrl, withCredentials: true })
 
   static instance() {

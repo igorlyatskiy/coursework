@@ -6,16 +6,15 @@ import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-  // TODO REMOVE IT
-
-  const app = await NestFactory.create(AppModule, {
-    cors: {
-      origin: 'http://localhost:3000',
-      credentials: true,
-    },
-  });
+  const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+
+  app.enableCors({
+    origin: configService.get('app.client.host'),
+    credentials: true,
+    allowedHeaders: ['JWT_TOKEN'],
+  });
+
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 

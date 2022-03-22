@@ -17,7 +17,7 @@ import {
   OFFLINE_APPROVE_START,
   OFFLINE_START_GAME,
   ONLINE_JOIN_GAME,
-  ONLINE_MOVE_OPPONENT_FIGURE,
+  ONLINE_MOVE_OPPONENT_FIGURE, START_FIGURE_MOVEMENT, STOP_FIGURE_MOVEMENT,
 } from "./actions";
 import { State } from "./type";
 import { GAME_TYPES } from "../../Constants";
@@ -41,6 +41,7 @@ const defaultState: State = {
     currentPlayerColor: null,
     gameId: null,
     currentGameType: null,
+    isFigureMoving: false,
   },
   app: {
     isServerConnected: false,
@@ -167,5 +168,14 @@ export const mainReducer = createReducer(defaultState, {
         message.error("AI game is finished!")
       }
     }
-  }
+  },
+
+
+  // Not in use.
+  [START_FIGURE_MOVEMENT]: (state) => {
+    state.game.isFigureMoving = true
+  },
+  [STOP_FIGURE_MOVEMENT]: (state) => {
+    state.game.isFigureMoving = false;
+  },
 });

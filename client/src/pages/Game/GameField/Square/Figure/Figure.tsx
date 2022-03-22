@@ -63,7 +63,7 @@ export default function Figure({ elementIndex, rowIndex, element }: FigureProps)
       userSelect: "none",
       width: '100%',
       height: '100%',
-      background: `url(${figureSvgSrc}) no-repeat 50% 50%`
+      background: `url(${figureSvgSrc}) no-repeat 50% 50%`,
     }} ref={canDrag ? drag : null}/>
     {isDragging && <CustomDragLayer src={figureSvgSrc}/>}
   </>

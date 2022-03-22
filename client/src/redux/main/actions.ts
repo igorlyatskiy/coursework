@@ -45,3 +45,10 @@ export const getValidMoves = createAction<string, string>(GAME_GET_VALID_MOVES)
 export const moveFigure = createAction<PartialMove, string>(GAME_MOVE_FIGURE);
 export const moveOpponentFigure = createAction<PartialMove, string>(ONLINE_MOVE_OPPONENT_FIGURE)
 export const moveAiFigure = createAction<void, string>(AI_MOVE_FIGURE)
+
+
+// Not in use for now.
+export const START_FIGURE_MOVEMENT = 'START_FIGURE_MOVEMENT'
+export const STOP_FIGURE_MOVEMENT = 'STOP_FIGURE_MOVEMENT'
+export const startFigureMovement = createAction<void, string>(START_FIGURE_MOVEMENT)
+export const stopFigureMovement = createAction<void, string>(STOP_FIGURE_MOVEMENT)
