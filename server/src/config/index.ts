@@ -28,4 +28,7 @@ export default () => ({
       cookieName: 'JWT_TOKEN',
     },
   },
+  sentry: {
+    dsn: process.env.SENTRY_DSN,
+  },
 });

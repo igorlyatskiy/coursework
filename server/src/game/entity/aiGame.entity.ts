@@ -5,6 +5,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -12,7 +13,13 @@ import { UserEntity } from '../../user/user.entity';
 
 @Entity({ name: 'ai_game' })
 export class AiGameEntity extends BaseEntity {
-  @PrimaryColumn()
+  constructor(player: UserEntity) {
+    super();
+
+    this.player = player;
+  }
+
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @CreateDateColumn()
@@ -23,9 +30,6 @@ export class AiGameEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity)
   player: UserEntity;
-
-  @Column({ default: 'w' })
-  playerColor: 'w' | 'b';
 
   @Column({ nullable: true })
   winnerColor: 'w' | 'b';

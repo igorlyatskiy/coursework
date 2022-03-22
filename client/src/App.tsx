@@ -14,7 +14,14 @@ import { wsIo } from "./redux/main/reducer";
 import { State } from "./redux/main/type";
 import { RootReducer } from "./redux";
 import LoadingPage from "./pages/Helpers/Loading/Loading";
-import { approveOfflineGame, approveStartGame, connectApp, moveOpponentFigure } from "./redux/main/actions";
+import {
+  approveAiGame,
+  approveOfflineGame,
+  approveStartGame,
+  connectApp,
+  moveAiFigure,
+  moveOpponentFigure
+} from "./redux/main/actions";
 import RoomsPage from "./pages/Rooms/Rooms";
 import SettingsPage from "./pages/Settings/Settings";
 import TopUsersPage from "./pages/Top/TopUsers";
@@ -48,8 +55,20 @@ export default function App() {
       }
     });
 
+    wsIo.on(`joinGame__${GAME_TYPES.ai}`, (data) => {
+      dispatch(approveAiGame(data));
+      const { gameId } = data;
+      if(gameId) {
+        navigate(`/game/${gameId}`);
+      }
+    });
+
     wsIo.on('moveOpponentFigure', (data) => {
       dispatch(moveOpponentFigure(data))
+    })
+
+    wsIo.on('moveAiFigure', ()=>{
+      dispatch(moveAiFigure());
     })
 
     wsIo.on(`finishGame__${GAME_TYPES.online}`, () => {

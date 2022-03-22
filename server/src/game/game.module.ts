@@ -11,12 +11,15 @@ import { UserModule } from '../user/user.module';
 import { AuthModule } from '../auth/auth.module';
 import { OfflineGameService } from './service/offlineGame.service';
 import { OfflineGameRepository } from './repository/offlineGame.repository';
+import { AiGameService } from './service/aiGame.service';
+import { AiGameRepository } from './repository/aiGame.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       OnlineGameRepository,
       OfflineGameRepository,
+      AiGameRepository,
       RoomRepository,
       UserRepository,
     ]),
@@ -25,6 +28,11 @@ import { OfflineGameRepository } from './repository/offlineGame.repository';
     AuthModule,
   ],
   controllers: [],
-  providers: [OnlineGameService, OfflineGameService, GameGateway],
+  providers: [
+    OnlineGameService,
+    OfflineGameService,
+    AiGameService,
+    GameGateway,
+  ],
 })
 export class GameModule {}

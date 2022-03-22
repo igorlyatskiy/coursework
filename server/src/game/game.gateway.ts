@@ -6,7 +6,7 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
-import { Logger, UseGuards } from '@nestjs/common';
+import { Controller, Logger, UseGuards } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 
 import { OnlineGameService } from './service/onlineGame.service';
@@ -15,6 +15,7 @@ import { WsGuard } from '../auth/guards/ws.guard';
 import { UserEntity } from '../user/user.entity';
 import { GAME_TYPES } from '../Constants';
 import { OfflineGameService } from './service/offlineGame.service';
+import { AiGameService } from './service/aiGame.service';
 
 type JwtAuthData = {
   user: UserEntity;
@@ -31,6 +32,7 @@ export class GameGateway
   constructor(
     private onlineGameService: OnlineGameService,
     private offlineGameService: OfflineGameService,
+    private aiGameService: AiGameService,
     private roomService: RoomService,
   ) {}
 
@@ -88,6 +90,12 @@ export class GameGateway
     //  TODO: Add logic.
   }
 
+  @SubscribeMessage(`moveFigure__${GAME_TYPES.ai}`)
+  async moveAiFigure(client: Socket, payload: any): Promise<void> {
+    client.emit('moveAiFigure');
+    //  TODO: Add logic.
+  }
+
   @SubscribeMessage(`finishGame__${GAME_TYPES.online}`)
   async finishOnlineGame(client: Socket, payload: any) {
     const { gameId, winnerId } = payload;
@@ -136,6 +144,13 @@ export class GameGateway
   ): Promise<void> {
     const gameId = await this.offlineGameService.startGame(user);
     client.emit(`joinGame__${GAME_TYPES.offline}`, { gameId });
+  }
+
+  @UseGuards(WsGuard)
+  @SubscribeMessage(`joinGame__${GAME_TYPES.ai}`)
+  async joiAiOfflineGame(client: Socket, { user }: JwtAuthData): Promise<void> {
+    const gameId = await this.aiGameService.startGame(user);
+    client.emit(`joinGame__${GAME_TYPES.ai}`, { gameId });
   }
 
   afterInit(server: Server) {

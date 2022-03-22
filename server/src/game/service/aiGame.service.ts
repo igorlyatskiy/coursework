@@ -3,16 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { RoomRepository } from '../../room/room.repository';
 import { UserRepository } from '../../user/user.repository';
-import { OfflineGameRepository } from '../repository/offlineGame.repository';
 import { UserEntity } from '../../user/user.entity';
-import { OfflineGameEntity } from '../entity/offlineGame.entity';
+import { AiGameRepository } from '../repository/aiGame.repository';
+import { AiGameEntity } from '../entity/aiGame.entity';
 
 @Injectable()
-export class OfflineGameService {
+export class AiGameService {
   private logger = new Logger('OnlineGameService');
   constructor(
-    @InjectRepository(OfflineGameRepository)
-    private gameRepository: OfflineGameRepository,
+    @InjectRepository(AiGameRepository)
+    private gameRepository: AiGameRepository,
     @InjectRepository(RoomRepository) private roomRepository: RoomRepository,
     @InjectRepository(UserRepository) private userRepository: UserRepository,
   ) {}
@@ -23,7 +23,7 @@ export class OfflineGameService {
   }
 
   async startGame(user: UserEntity) {
-    const game = new OfflineGameEntity(user);
+    const game = new AiGameEntity(user);
     await this.gameRepository.saveNewGame(game);
     return game.id;
   }

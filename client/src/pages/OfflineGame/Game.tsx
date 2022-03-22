@@ -4,7 +4,7 @@ import { Button, Select } from "antd";
 import withSession from "../../components/WithSession";
 import { GAME_TYPES } from "../../Constants";
 import { useDispatch } from "react-redux";
-import { startOfflineGame } from "../../redux/main/actions";
+import { startAiGame, startOfflineGame } from "../../redux/main/actions";
 
 const options = [
   {
@@ -26,8 +26,11 @@ function Game() {
   }
 
   const onSubmit = () => {
-    if (activeGameType) {
-      dispatch(startOfflineGame(activeGameType));
+    switch (activeGameType) {
+      case GAME_TYPES.offline:
+        return dispatch(startOfflineGame(activeGameType));
+      case GAME_TYPES.ai:
+        return dispatch(startAiGame(activeGameType));
     }
   }
 
@@ -35,6 +38,7 @@ function Game() {
     <Select
       showSearch
       optionFilterProp="children"
+      placeholder="Select game type"
       style={{ width: 250, marginBottom: 16 }}
       onChange={onGameTypeChange}
     >

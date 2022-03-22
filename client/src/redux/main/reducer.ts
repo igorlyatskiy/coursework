@@ -5,6 +5,9 @@ import Cookies from 'js-cookie';
 
 import ChessService from "../../chess.js/chess";
 import {
+  AI_APPROVE_START,
+  AI_MOVE_FIGURE,
+  AI_START_GAME,
   APP_CONNECT,
   APP_SET_SESSION,
   GAME_APPROVE_START,
@@ -18,6 +21,7 @@ import {
 } from "./actions";
 import { State } from "./type";
 import { GAME_TYPES } from "../../Constants";
+import { PartialMove } from "chess.ts";
 
 const chess = new ChessService()
 export const wsIo = io('http://localhost:8080', {
@@ -67,6 +71,14 @@ export const mainReducer = createReducer(defaultState, {
     state.game.currentGameType = payload;
     wsIo.emit(`joinGame__${payload}`);
   },
+  [AI_START_GAME]: (state, { payload }) => {
+    state.game.chess.reset();
+    state.game.board = state.game.chess.board();
+    state.game.validMoves = [];
+    state.game.isGameFinished = false;
+    state.game.currentGameType = payload;
+    wsIo.emit(`joinGame__${payload}`);
+  },
   [GAME_LEAVE_GAME]: (state, { payload }) => {
     wsIo.emit(`leaveGame__${GAME_TYPES.online}`, { roomId: payload });
     state.game.isGameActive = false;
@@ -83,6 +95,12 @@ export const mainReducer = createReducer(defaultState, {
     state.game.currentPlayerColor = 'w';
     state.game.gameId = payload.gameId;
     message.info(`White player begins!`);
+  },
+  [AI_APPROVE_START]: (state, { payload }) => {
+    state.game.isGameActive = true;
+    state.game.currentPlayerColor = 'w';
+    state.game.gameId = payload.gameId;
+    message.info(`You begin!`);
   },
   [GAME_GET_VALID_MOVES]: (state, { payload }) => {
     state.game.validMoves = state.game.chess.moves(payload);
@@ -131,7 +149,22 @@ export const mainReducer = createReducer(defaultState, {
       state.game.activePlayerColor = state.game.chess.activePlayer;
       state.game.isGameFinished = isGameFinished;
       if (state.game.isGameFinished) {
-        message.error("OfflineGame is finished!")
+        message.error("Game is finished!")
+      }
+    }
+  },
+  [AI_MOVE_FIGURE]: (state, { payload }) => {
+    const move = state.game.chess.moveAI(3);
+    if (move) {
+      console.log(move);
+      state.game.chess.move(move as PartialMove);
+      state.game.board = state.game.chess.board();
+      state.game.chess.turn();
+      state.game.validMoves = [];
+      state.game.activePlayerColor = state.game.chess.activePlayer;
+      state.game.isGameFinished = !state.game.chess.isGameActive();
+      if (state.game.isGameFinished) {
+        message.error("AI game is finished!")
       }
     }
   }
