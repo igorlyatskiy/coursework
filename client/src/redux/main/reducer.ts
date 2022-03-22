@@ -88,18 +88,21 @@ export const mainReducer = createReducer(defaultState, {
     state.game.isGameActive = true;
     const isWhite = state?.app?.session?.userId === payload.whitePlayer;
     state.game.currentPlayerColor = isWhite ? 'w' : 'b';
+    state.game.activePlayerColor = 'w';
     state.game.currentGameType = GAME_TYPES.online;
     message.info(`You are playing as ${isWhite ? 'white' : 'black'}`);
   },
   [OFFLINE_APPROVE_START]: (state, { payload }) => {
     state.game.isGameActive = true;
     state.game.currentPlayerColor = 'w';
+    state.game.activePlayerColor = 'w';
     state.game.gameId = payload.gameId;
     message.info(`White player begins!`);
   },
   [AI_APPROVE_START]: (state, { payload }) => {
     state.game.isGameActive = true;
     state.game.currentPlayerColor = 'w';
+    state.game.activePlayerColor = 'w';
     state.game.gameId = payload.gameId;
     message.info(`You begin!`);
   },

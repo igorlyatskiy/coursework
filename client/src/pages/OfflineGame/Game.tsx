@@ -28,8 +28,10 @@ function Game() {
   const onSubmit = () => {
     switch (activeGameType) {
       case GAME_TYPES.offline:
+        setActiveGameType(null);
         return dispatch(startOfflineGame(activeGameType));
       case GAME_TYPES.ai:
+        setActiveGameType(null);
         return dispatch(startAiGame(activeGameType));
     }
   }
