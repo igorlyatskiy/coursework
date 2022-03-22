@@ -16,12 +16,14 @@ import { AuthService } from './auth.service';
 export class AuthController {
   private readonly logger = new Logger('AuthController');
   private readonly JWT_COOKIE_NAME: string;
+  private readonly CLIENT_URI: string;
 
   constructor(
     private readonly authService: AuthService,
     private configService: ConfigService,
   ) {
     this.JWT_COOKIE_NAME = this.configService.get('auth.jwt.cookieName');
+    this.CLIENT_URI = this.configService.get('app.client.uri');
   }
 
   @Get('google/login')
@@ -33,13 +35,13 @@ export class AuthController {
   async googleAuthRedirect(@Req() req, @Res() res) {
     const token = await this.authService.validateGoogle(req);
     res.cookie(this.JWT_COOKIE_NAME, token);
-    res.redirect('http://localhost:3000');
+    res.redirect(this.CLIENT_URI);
   }
 
   @Get('google/logout')
   googleLogout(@Res() res) {
     res.clearCookie(this.JWT_COOKIE_NAME);
-    res.redirect('http://localhost:3000');
+    res.redirect(this.CLIENT_URI);
   }
 
   @Get('session')

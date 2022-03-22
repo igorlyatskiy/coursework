@@ -2,6 +2,7 @@ import { createReducer } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 import { message } from "antd";
 import Cookies from 'js-cookie';
+import { PartialMove } from "chess.ts";
 
 import ChessService from "../../chess.js/chess";
 import {
@@ -20,11 +21,10 @@ import {
   ONLINE_MOVE_OPPONENT_FIGURE, START_FIGURE_MOVEMENT, STOP_FIGURE_MOVEMENT,
 } from "./actions";
 import { State } from "./type";
-import { GAME_TYPES } from "../../Constants";
-import { PartialMove } from "chess.ts";
+import { GAME_TYPES, SERVER_URI } from "../../Constants";
 
 const chess = new ChessService()
-export const wsIo = io('http://localhost:8080', {
+export const wsIo = io(SERVER_URI, {
   extraHeaders: {
     JWT_TOKEN: Cookies.get('JWT_TOKEN') || ''
   }
@@ -157,7 +157,6 @@ export const mainReducer = createReducer(defaultState, {
   [AI_MOVE_FIGURE]: (state, { payload }) => {
     const move = state.game.chess.moveAI(3);
     if (move) {
-      console.log(move);
       state.game.chess.move(move as PartialMove);
       state.game.board = state.game.chess.board();
       state.game.chess.turn();

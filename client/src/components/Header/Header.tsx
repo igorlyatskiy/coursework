@@ -1,14 +1,15 @@
 import React from "react";
 import { Avatar, Button, Dropdown, Layout, Menu, Typography } from "antd";
 import { useNavigate } from 'react-router-dom';
-import { State } from "../../redux/main/type";
 import { useSelector } from "react-redux";
-import { RootReducer } from "../../redux";
 import {
   LogoutOutlined,
   UserOutlined
 } from "@ant-design/icons";
-import api from "../../api/api";
+
+import { State } from "../../redux/main/type";
+import { RootReducer } from "../../redux";
+import { SERVER_URI } from "../../Constants";
 
 
 function HeaderComponent() {
@@ -22,7 +23,7 @@ function HeaderComponent() {
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <Button type="link" href={api.baseUrl + '/auth/google/logout'} style={{ textAlign: 'left' }}>
+        <Button type="link" href={SERVER_URI + '/auth/google/logout'} style={{ textAlign: 'left' }}>
           <LogoutOutlined/> Change account
         </Button>
       </Menu.Item>

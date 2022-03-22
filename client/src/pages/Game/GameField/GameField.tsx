@@ -6,7 +6,8 @@ export default function GameField({ board }: { board: Board }) {
 
   return <GameFieldContainer>
     {board.map((row, rowIndex) => row.map((element, elementIndex) => {
-        return <Square rowIndex={rowIndex} element={element} elementIndex={elementIndex}/>
+        return <Square key={`${rowIndex} ${elementIndex}`} rowIndex={rowIndex} element={element}
+                       elementIndex={elementIndex}/>
       })
     )}
   </GameFieldContainer>

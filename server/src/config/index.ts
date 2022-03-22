@@ -11,19 +11,19 @@ export default () => ({
     debug: !!process.env.DEBUG,
   },
   app: {
-    host: process.env.APP_HOST || 'localhost',
+    uri: process.env.APP_URI,
     port: process.env.APP_PORT || 8080,
     admins: JSON.parse(process.env.APP_ADMINS),
     isDev: process.env.NODE_ENV === 'development',
     client: {
-      host: process.env.APP_CLIENT_HOST,
+      uri: process.env.APP_CLIENT_URI,
     },
   },
   auth: {
     google: {
       clientId: process.env.GOOGLE_AUTH_CLIENT_ID,
       clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
-      callbackUrl: 'http://localhost:8080/auth/google/callback',
+      callbackUrl: `${process.env.APP_URI}/auth/google/callback`,
     },
     jwt: {
       secret: process.env.JWT_SECRET_KEY,

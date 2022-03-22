@@ -14,7 +14,7 @@ export interface Session {
   userId: string;
 }
 
-let sessionCache: Session | undefined;
+let sessionCache: Session | null = null;
 
 export function getSession(dispatch: any) {
   api.getSession()

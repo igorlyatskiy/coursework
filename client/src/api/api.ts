@@ -1,7 +1,9 @@
 import axios from "axios";
 
+import { SERVER_URI } from "../Constants";
+
 class Api {
-  baseUrl: string = process.env.REACT_APP_SERVER_URI as string;
+  baseUrl: string = SERVER_URI;
   axiosInstance = axios.create({ baseURL: this.baseUrl, withCredentials: true })
 
   static instance() {
