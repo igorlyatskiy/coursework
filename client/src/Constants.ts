@@ -32,7 +32,7 @@ export enum FIGURES_NAMES {
 
 class Constants {
   letters: string[] = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' ]
-  numbers: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
+  numbers: number[] = [ 8, 7, 6, 5, 4, 3, 2, 1 ]
 
   rowNumbers = 8;
 }
@@ -43,17 +43,40 @@ export default constantsInstance
 
 export const getSquare = (rowIndex: number, colIndex: number) => constantsInstance.letters[colIndex] + constantsInstance.numbers[rowIndex]
 
-export const getColor = (level: string) => {
+export enum PLAYERS_LEVELS {
+  beginner = 'Beginner',
+  champion = 'Champion',
+  hero = 'Hero',
+  admin = 'Admin',
+}
+
+export enum USERS_ROLES {
+  user = 'user',
+  admin = 'admin'
+}
+
+export const getLevelColor = (level: string) => {
   switch (level) {
-    case 'Beginner':
+    case PLAYERS_LEVELS.beginner:
       return 'green';
-    case 'Champion':
+    case PLAYERS_LEVELS.champion:
       return 'purple';
-    case 'Hero':
+    case PLAYERS_LEVELS.hero:
       return 'orange';
-    case 'Admin':
+    case PLAYERS_LEVELS.admin:
       return 'black';
     default:
       return 'gray'
   }
 };
+
+export const getRoleColor = (role: string) => {
+  switch (role) {
+    case USERS_ROLES.user:
+      return 'orange'
+    case USERS_ROLES.admin:
+      return 'red'
+    default:
+      return 'gray'
+  }
+}

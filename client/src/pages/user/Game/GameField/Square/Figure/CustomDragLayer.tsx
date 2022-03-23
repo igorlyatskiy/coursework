@@ -1,6 +1,6 @@
 import { useDragLayer, XYCoord } from "react-dnd";
 import { CSSProperties } from "react";
-import { SQUARE_SIZE } from "../../../../../Constants";
+import { SQUARE_SIZE } from "../../../../../../Constants";
 
 export const CustomDragLayer = ({ src }: { src: string }) => {
   const {

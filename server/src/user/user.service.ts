@@ -30,6 +30,10 @@ export class UserService {
     return data.map(this.getPublicUserData);
   }
 
+  async getAllUsers() {
+    return this.userRepository.getUsers();
+  }
+
   getPublicUserData(user: UserEntity) {
     return {
       username: user.username
@@ -39,5 +43,10 @@ export class UserService {
       avatar: user.avatar,
       levels: user.levels,
     };
+  }
+
+  async updateUserStatus(userId: string, status: boolean) {
+    await this.userRepository.updateUserStatus(userId, status);
+    return this.getAllUsers();
   }
 }

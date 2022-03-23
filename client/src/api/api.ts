@@ -40,6 +40,16 @@ class Api {
     const { data } = await this.axiosInstance.get('/top');
     return data;
   }
+
+  async getAllUsers() {
+    const { data } = await this.axiosInstance.get('/users');
+    return data;
+  }
+
+  async updateUserStatus(userId: string, status: boolean) {
+    const { data } = await this.axiosInstance.patch(`users/${userId}/status`, { status })
+    return data;
+  }
 }
 
 const apiInstance = new Api();

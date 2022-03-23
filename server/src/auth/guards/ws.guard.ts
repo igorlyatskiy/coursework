@@ -1,4 +1,9 @@
-import { CanActivate, Injectable, Logger } from '@nestjs/common';
+import {
+  CanActivate,
+  ForbiddenException,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 
 import { UserService } from '../../user/user.service';
 import { JwtService } from '../jwt.service';
@@ -30,6 +35,11 @@ export class WsGuard implements CanActivate {
         this.jwtService.validateToken(JWT_TOKEN);
 
       const user = await this.userService.getUserByEmail(userData.email);
+
+      if (!user.isActive) {
+        return false;
+      }
+
       context.switchToWs().getData().user = user;
 
       return true;

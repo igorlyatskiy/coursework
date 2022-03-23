@@ -60,6 +60,7 @@ export class AuthController {
       avatar: user.avatar,
       username: user.username,
       userId: user.id,
+      roles: user.roles,
     };
   }
 }

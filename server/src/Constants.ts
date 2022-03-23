@@ -3,3 +3,7 @@ export enum GAME_TYPES {
   offline = 'pvp-offline',
   ai = 'ai',
 }
+
+export enum Role {
+  admin = 'admin',
+}

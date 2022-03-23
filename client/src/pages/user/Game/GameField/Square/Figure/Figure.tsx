@@ -5,10 +5,10 @@ import { getEmptyImage } from "react-dnd-html5-backend";
 import { useEffect, useState } from "react";
 
 import useFigure from "./hooks/useFigure";
-import { getValidMoves } from "../../../../../redux/main/actions";
-import { getSquare, SQUARE_SIZE } from "../../../../../Constants";
-import { State } from "../../../../../redux/main/type";
-import { RootReducer } from "../../../../../redux";
+import { getValidMoves } from "../../../../../../redux/main/actions";
+import { getSquare, SQUARE_SIZE } from "../../../../../../Constants";
+import { State } from "../../../../../../redux/main/type";
+import { RootReducer } from "../../../../../../redux";
 import { CustomDragLayer } from "./CustomDragLayer";
 import { Square } from "chess.ts/dist/types";
 

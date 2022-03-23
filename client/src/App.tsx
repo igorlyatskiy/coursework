@@ -7,12 +7,12 @@ import HeaderComponent from "./components/Header/Header";
 
 import './App.css'
 import HomePage from "./pages/Home/HomePage";
-import NotFoundPage from "./pages/Helpers/NotFound/NotFoundPage";
-import OnlineGamePage from "./pages/Game/GamePage";
+import NotFoundPage from "./pages/user/Helpers/NotFound/NotFoundPage";
+import OnlineGamePage from "./pages/user/Game/GamePage";
 import { wsIo } from "./redux/main/reducer";
 import { State } from "./redux/main/type";
 import { RootReducer } from "./redux";
-import LoadingPage from "./pages/Helpers/Loading/Loading";
+import LoadingPage from "./pages/user/Helpers/Loading/Loading";
 import {
   approveAiGame,
   approveOfflineGame,
@@ -21,11 +21,12 @@ import {
   moveAiFigure,
   moveOpponentFigure
 } from "./redux/main/actions";
-import RoomsPage from "./pages/Rooms/Rooms";
-import SettingsPage from "./pages/Settings/Settings";
-import TopUsersPage from "./pages/Top/TopUsers";
-import Game from "./pages/OfflineGame/Game";
+import RoomsPage from "./pages/user/Rooms/Rooms";
+import SettingsPage from "./pages/user/Settings/Settings";
+import TopUsersPage from "./pages/user/Top/TopUsers";
+import Game from "./pages/user/OfflineGame/Game";
 import { FIGURE_MOVING_TIME, GAME_TYPES } from "./Constants";
+import AdminUsersPage from "./pages/admin/Users";
 
 const { Content } = Layout;
 
@@ -99,6 +100,7 @@ export default function App() {
             <Route path='/game/:gameId' element={<OnlineGamePage/>}/>
             <Route path='/settings' element={<SettingsPage/>}/>
             <Route path='/top' element={<TopUsersPage/>}/>
+            <Route path='/admin/users' element={<AdminUsersPage/>}/>
             <Route path="*" element={<NotFoundPage/>}/>
           </Routes>
           : <LoadingPage text="Connecting to the app"/>

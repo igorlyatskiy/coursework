@@ -10,9 +10,10 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 import { RoomService } from './room.service';
+import { UserGuard } from '../auth/guards/user.guard';
 
 @Controller()
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), UserGuard)
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 

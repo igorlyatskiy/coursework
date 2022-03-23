@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button,  Table, Tag, Typography } from 'antd';
 
-
 import CreateRoomModal from "./CreateRoomModal";
-import api from "../../api/api";
-import withSession from "../../components/WithSession";
-import { getColor } from "../../Constants";
+import api from "../../../api/api";
+import withSession from "../../../components/WithSession";
+import { getLevelColor } from "../../../Constants";
 
 const { Link } = Typography;
 
@@ -37,7 +36,7 @@ function RoomsPage() {
       key: 'level',
       render: (levels: string[]) => {
         return <>
-          {levels.map((item) => <Tag key={item} color={getColor(item)}>{item}</Tag>)}
+          {levels.map((item) => <Tag key={item} color={getLevelColor(item)}>{item}</Tag>)}
         </>
       }
     },

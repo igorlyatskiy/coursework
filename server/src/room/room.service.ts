@@ -1,8 +1,7 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { RoomRepository } from './room.repository';
-import { UserEntity } from '../user/user.entity';
 import { RoomEntity } from './room.entity';
 
 @Injectable()

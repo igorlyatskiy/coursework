@@ -1,4 +1,4 @@
-import { FIGURES_COLORS_NAMES, FIGURES_NAMES } from "../../../../../../Constants";
+import { FIGURES_COLORS_NAMES, FIGURES_NAMES } from "../../../../../../../Constants";
 import { Piece } from "chess.ts";
 
 interface GetFigureParams {

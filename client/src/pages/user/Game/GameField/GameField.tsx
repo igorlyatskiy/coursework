@@ -1,4 +1,4 @@
-import { Board } from "../../../Constants";
+import { Board } from "../../../../Constants";
 import GameFieldContainer from "./styled/GameFieldContainer";
 import Square from "./Square/Square";
 

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { SQUARE_SIZE } from "../../../../Constants";
+import { SQUARE_SIZE } from "../../../../../Constants";
 
 export default styled('div')`
   display: flex;

@@ -10,9 +10,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   app.enableCors({
-    origin: configService.get('app.client.uri'),
+    origin: true,
     credentials: true,
-    allowedHeaders: ['JWT_TOKEN'],
   });
 
   app.useGlobalPipes(new ValidationPipe());

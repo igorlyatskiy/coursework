@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Tag, Typography } from "antd";
 
-import withSession from "../../components/WithSession";
-import api from "../../api/api";
-import { getColor } from "../../Constants";
+import withSession from "../../../components/WithSession";
+import api from "../../../api/api";
+import { getLevelColor } from "../../../Constants";
 import TopUsersTable from './styled/TopUsers'
 
 function TopUsers() {
@@ -27,7 +27,7 @@ function TopUsers() {
       key: 'level',
       render: (levels: string[]) => {
         return <>
-          {levels.map((item) => <Tag key={item} color={getColor(item)}>{item}</Tag>)}
+          {levels.map((item) => <Tag key={item} color={getLevelColor(item)}>{item}</Tag>)}
         </>
       }
     },

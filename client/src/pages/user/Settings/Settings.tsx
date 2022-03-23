@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Divider, Layout, message, Typography } from "antd";
-import { State } from "../../redux/main/type";
+import { State } from "../../../redux/main/type";
 import { useDispatch, useSelector } from "react-redux";
-import { RootReducer } from "../../redux";
-import api from "../../api/api";
-import withSession, { getSession } from "../../components/WithSession";
+import { RootReducer } from "../../../redux";
+import api from "../../../api/api";
+import withSession, { getSession } from "../../../components/WithSession";
 import { IdcardOutlined } from "@ant-design/icons";
 
 function SettingsPage() {

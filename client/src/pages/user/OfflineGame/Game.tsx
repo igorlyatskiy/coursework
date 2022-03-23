@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Button, Select } from "antd";
 
-import withSession from "../../components/WithSession";
-import { GAME_TYPES } from "../../Constants";
+import withSession from "../../../components/WithSession";
+import { GAME_TYPES } from "../../../Constants";
 import { useDispatch } from "react-redux";
-import { startAiGame, startOfflineGame } from "../../redux/main/actions";
+import { startAiGame, startOfflineGame } from "../../../redux/main/actions";
 
 const options = [
   {

@@ -1,18 +1,31 @@
 import React from "react";
-import { Col, List, Row, Layout } from "antd";
-import { FireTwoTone, PlaySquareTwoTone, SettingTwoTone, StarTwoTone, ThunderboltTwoTone } from "@ant-design/icons";
+import { Col, List, Row, Layout, Typography } from "antd";
+import {
+  FireTwoTone,
+  PlaySquareTwoTone,
+  SettingTwoTone,
+  StarTwoTone,
+  ThunderboltTwoTone,
+  ToolFilled
+} from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+
 import withSession from "../../components/WithSession";
+import { State } from "../../redux/main/type";
+import { RootReducer } from "../../redux";
+import { isAdmin } from "../../roles/isRole";
 
 function HomePage() {
-  const dispatch = useDispatch();
-  const data = [
+  const { app }: State = useSelector((root: RootReducer) => root.mainReducer);
+
+  const isAdminUser = isAdmin(app.session?.roles);
+
+  const userData = [
     {
       icon: <FireTwoTone twoToneColor="orange"/>,
       text: 'Game.',
       path: '/offline',
-      action: () => {},
     },
     // {
     //   icon: <PlaySquareTwoTone twoToneColor='red'/>,
@@ -36,24 +49,47 @@ function HomePage() {
     }
   ];
 
-  // TODO REMOVE IT
-  const handleMenuClickAction = (action: any) => action ? action() : null
+  const adminData = [
+    {
+      icon: null,
+      text: "Users.",
+      path: '/admin/users',
+    },
+  ];
 
   return <Row gutter={24}>
     <Col xs={24} sm={12} md={10} lg={8} style={{ marginBottom: 16 }}>
       <List
         size="small"
         bordered
-        dataSource={data}
+        dataSource={userData}
         renderItem={(item) => (
           <List.Item>
-            <Link to={item.path} onClick={() => handleMenuClickAction(item.action)}>
+            <Link to={item.path}>
               {item.icon}
               <span style={{ marginLeft: '6px' }}>{item.text}</span>
             </Link>
           </List.Item>
         )}
+        style={{ marginBottom: 32 }}
       />
+      {
+        isAdminUser && <List
+          size="small"
+          header={<b><ToolFilled/> App management </b>}
+          bordered
+          dataSource={adminData}
+          renderItem={(item) => (
+            <List.Item>
+              <Link to={item.path}>
+                {!!item.icon && item.icon}
+                <span style={{ marginLeft: !!item.icon ? '6px' : 0 }}>{item.text}</span>
+              </Link>
+            </List.Item>
+          )}
+        />
+      }
+
     </Col>
   </Row>
 }

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Button, Form, Input, message, Modal } from "antd";
 
-import api from "../../api/api";
+import api from "../../../api/api";
 import { useNavigate } from "react-router-dom";
 
 interface CreateRoomModalProps {

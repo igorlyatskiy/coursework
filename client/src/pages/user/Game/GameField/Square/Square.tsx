@@ -5,12 +5,12 @@ import { Piece } from "chess.ts";
 import StyledSquare from './styled/Square'
 import SquareColorLayout from "./SquareLayouts/SquareColorLayout";
 import Figure from './Figure/Figure'
-import { getSquare } from "../../../../Constants";
-import { State } from "../../../../redux/main/type";
+import { getSquare } from "../../../../../Constants";
+import { State } from "../../../../../redux/main/type";
 import { useDispatch, useSelector } from "react-redux";
-import { RootReducer } from "../../../../redux";
+import { RootReducer } from "../../../../../redux";
 import SquareDotLayout from "./SquareLayouts/SquareDotLayout";
-import { moveFigure } from "../../../../redux/main/actions";
+import { moveFigure } from "../../../../../redux/main/actions";
 import SquareCircleLayout from "./SquareLayouts/SquareCircleLayout";
 
 interface SquareProps {
