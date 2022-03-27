@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Logger } from '@nestjs/common';
+import _ = require('lodash');
 
 import { GoogleUserData, UserEntity } from './user.entity';
 import { UpdateUserDto } from './dto/updateUser.dto';
@@ -27,8 +28,27 @@ export class UserRepository extends Repository<UserEntity> {
     return user;
   }
 
-  async updateUser(updateUserDto: UpdateUserDto, user: UserEntity) {
+  async updateMe(updateUserDto: UpdateUserDto, user: UserEntity) {
     await UserEntity.update({ id: user.id }, updateUserDto);
+  }
+
+  async updateUser(user: UserEntity) {
+    await UserEntity.update(
+      {
+        id: user.id,
+      },
+      user,
+    );
+  }
+
+  async updateUserWithoutRoles(user: UserEntity) {
+    const userWithoutRoles = _.omit(user, 'roles');
+    await UserEntity.update(
+      {
+        id: user.id,
+      },
+      userWithoutRoles,
+    );
   }
 
   async updateUserStatus(userId: string, status: boolean) {

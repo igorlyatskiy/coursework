@@ -30,6 +30,11 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (!user) {
       throw new UnauthorizedException();
     }
-    return user;
+    return {
+      ...user,
+      isSuperUser: this.configService
+        .get('app.superUsers')
+        .includes(user.email),
+    };
   }
 }

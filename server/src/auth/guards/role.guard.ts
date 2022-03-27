@@ -11,20 +11,20 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class RoleGuard implements CanActivate {
   private readonly logger = new Logger('RoleGuard');
-  private admins: string[];
+  private superUsers: string[];
 
   constructor(
     private readonly reflector: Reflector,
     private configService: ConfigService,
   ) {
-    this.admins = this.configService.get('app.admins');
+    this.superUsers = this.configService.get('app.superUsers');
   }
 
   public canActivate(context: ExecutionContext) {
     const [req] = context.getArgs();
     const { user } = req;
 
-    if (this.admins.includes(user.email)) {
+    if (this.superUsers.includes(user.email)) {
       return true;
     }
 

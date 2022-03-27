@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
 import { GoogleUserData, UserEntity } from './user.entity';
 import { UpdateUserDto } from './dto/updateUser.dto';
+import _ from 'lodash';
 
 @Injectable()
 export class UserService {
@@ -21,8 +22,16 @@ export class UserService {
     return data;
   }
 
-  async updateUser(updateUserDto: UpdateUserDto, user: UserEntity) {
-    return this.userRepository.updateUser(updateUserDto, user);
+  async updateMe(updateUserDto: UpdateUserDto, user: UserEntity) {
+    return this.userRepository.updateMe(updateUserDto, user);
+  }
+
+  async updateUser(user: UserEntity, isAdminSuperUser: boolean) {
+    if (isAdminSuperUser) {
+      await this.userRepository.updateUser(user);
+    } else {
+      await this.userRepository.updateUserWithoutRoles(user);
+    }
   }
 
   async getTopUsers() {

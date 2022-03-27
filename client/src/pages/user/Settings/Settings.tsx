@@ -23,7 +23,7 @@ function SettingsPage() {
 
   const handleSettingsSubmit = async () => {
     try {
-      await api.updateUser(username as string)
+      await api.updateMe(username as string)
       getSession(dispatch)
       message.success('Settings were updated');
     } catch (error) {

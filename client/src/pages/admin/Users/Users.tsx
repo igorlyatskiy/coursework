@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Button, message, Popconfirm, Table, Tag } from "antd";
+import { message, Popconfirm, Table, Tag } from "antd";
 import { useSelector } from "react-redux";
 
-import withSession from "../../components/WithSession";
-import { State } from "../../redux/main/type";
-import { RootReducer } from "../../redux";
-import { isAdmin } from "../../roles/isRole";
-import api from "../../api/api";
-import { getLevelColor, getRoleColor, USERS_ROLES } from "../../Constants";
-import { CheckCircleTwoTone, StopTwoTone } from "@ant-design/icons";
+import withSession from "../../../components/WithSession";
+import { State } from "../../../redux/main/type";
+import { RootReducer } from "../../../redux";
+import { isAdmin, isSuperUser } from "../../../roles/isRole";
+import api from "../../../api/api";
+import { getLevelColor, getRoleColor, USERS_ROLES } from "../../../Constants";
+import { CheckCircleTwoTone, EditTwoTone, StopTwoTone } from "@ant-design/icons";
+import UpdateUserModal from "./UpdateUserModal";
 
-interface User {
+export interface User {
   id: string;
   firstName: string;
   lastName: string;
@@ -27,8 +28,10 @@ interface User {
 function AdminUsersPage() {
   const { app }: State = useSelector((root: RootReducer) => root.mainReducer);
   const isAdminUser = isAdmin(app.session?.roles);
+  const isSuperAdmin = isSuperUser();
 
   const [ users, setUsers ] = useState<User[]>([]);
+  const [ editingUser, setEditingUser ] = useState<User | null>(null);
 
   useEffect(() => {
     api.getAllUsers().then((data) => {
@@ -36,7 +39,7 @@ function AdminUsersPage() {
     })
   }, [])
 
-  if (!isAdminUser) {
+  if (!isAdminUser && !isSuperAdmin) {
     return <div>Forbidden</div>
   }
 
@@ -64,16 +67,6 @@ function AdminUsersPage() {
       key: 'email',
     },
     {
-      title: 'Roles',
-      dataIndex: 'roles',
-      key: 'roles',
-      render: (roles: string[]) => {
-        return <>
-          {roles.map((item) => <Tag key={item} color={getRoleColor(item)}>{item}</Tag>)}
-        </>
-      }
-    },
-    {
       title: 'Level',
       dataIndex: 'levels',
       key: 'level',
@@ -95,10 +88,44 @@ function AdminUsersPage() {
       >
         {isActive ? <CheckCircleTwoTone twoToneColor='#00FF00'/> : <StopTwoTone twoToneColor='red'/>}
       </Popconfirm>
+    },
+    {
+      title: '',
+      dataIndex: 'edit',
+      key: 'edit',
+      render: (tmp: any, user: User) => <EditTwoTone color='blue' onClick={() => {
+        setEditingUser(user)
+      }
+      }/>
     }
   ];
+
+  if (isSuperAdmin) {
+    columns.splice(2, 0, {
+      title: 'Roles',
+      dataIndex: 'roles',
+      key: 'roles',
+      render: (roles: string[]) => {
+        return <>
+          {roles.map((item) => <Tag key={item} color={getRoleColor(item)}>{item}</Tag>)}
+        </>
+      }
+    })
+  }
+
+
   return <>
     <Table dataSource={users} columns={columns} bordered/>
+    <UpdateUserModal
+      setUsers={setUsers} user={editingUser}
+      handleOk={() => {
+        setEditingUser(null);
+      }}
+      handleCancel={() => {
+        setEditingUser(null)
+      }
+      }
+    />
   </>
 }
 

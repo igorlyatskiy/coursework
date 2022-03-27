@@ -9,7 +9,7 @@ import {
 
 @Injectable()
 export class UserGuard implements CanActivate {
-  private readonly logger = new Logger('AdminGuard');
+  private readonly logger = new Logger('UserGuard');
 
   public canActivate(context: ExecutionContext) {
     const [req] = context.getArgs();

@@ -26,7 +26,7 @@ import SettingsPage from "./pages/user/Settings/Settings";
 import TopUsersPage from "./pages/user/Top/TopUsers";
 import Game from "./pages/user/OfflineGame/Game";
 import { FIGURE_MOVING_TIME, GAME_TYPES } from "./Constants";
-import AdminUsersPage from "./pages/admin/Users";
+import AdminUsersPage from "./pages/admin/Users/Users";
 
 const { Content } = Layout;
 

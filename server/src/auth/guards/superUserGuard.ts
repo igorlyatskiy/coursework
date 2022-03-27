@@ -7,19 +7,19 @@ import {
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class AdminGuard implements CanActivate {
-  private readonly logger = new Logger('AdminGuard');
-  private admins: string[];
+export class SuperUserGuard implements CanActivate {
+  private readonly logger = new Logger('SuperUserGuard');
+  private superUsers: string[];
 
   constructor(private configService: ConfigService) {
-    this.admins = this.configService.get('app.admins');
+    this.superUsers = this.configService.get('app.superUsers');
   }
 
   public canActivate(context: ExecutionContext) {
     const [req] = context.getArgs();
     const { user } = req;
 
-    if (this.admins.includes(user.email)) {
+    if (this.superUsers.includes(user.email)) {
       return true;
     }
 

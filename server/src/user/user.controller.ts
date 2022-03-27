@@ -17,6 +17,7 @@ import { Role } from '../Constants';
 import { RoleGuard } from '../auth/guards/role.guard';
 import { ToggleUserStatusDto } from './dto/toggleUserStatus.dto';
 import { UserGuard } from '../auth/guards/user.guard';
+import { UserEntity } from './user.entity';
 
 @Controller()
 @UseGuards(AuthGuard('jwt'), UserGuard)
@@ -24,8 +25,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Put('user')
-  updateUser(@Body() updateUserDto: UpdateUserDto, @Req() req) {
-    return this.userService.updateUser(updateUserDto, req.user);
+  updateMe(@Body() updateUserDto: UpdateUserDto, @Req() req) {
+    return this.userService.updateMe(updateUserDto, req.user);
   }
 
   @Get('top')
@@ -38,6 +39,13 @@ export class UserController {
   @UseGuards(RoleGuard)
   getAllUsers() {
     return this.userService.getAllUsers();
+  }
+
+  @Put('users')
+  @Roles(Role.admin)
+  @UseGuards(RoleGuard)
+  async updateUser(@Body() body: UserEntity, @Req() req) {
+    await this.userService.updateUser(body, req.user.isSuperUser);
   }
 
   @Patch('users/:userId/status')

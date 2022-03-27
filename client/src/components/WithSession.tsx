@@ -13,6 +13,7 @@ export interface Session {
   username: string;
   userId: string;
   roles: string[];
+  isSuperUser: boolean;
 }
 
 let sessionCache: Session | null = null;
@@ -28,6 +29,7 @@ export function getSession(dispatch: any) {
         username: data.username,
         userId: data.userId,
         roles: data.roles,
+        isSuperUser: data.isSuperUser,
       }
       sessionCache = sessionData;
       dispatch(setSession(sessionData));

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { SERVER_URI } from "../Constants";
+import { User } from "../pages/admin/Users/Users";
 
 class Api {
   baseUrl: string = SERVER_URI;
@@ -28,7 +29,7 @@ class Api {
     return await this.axiosInstance.post('/rooms', { name: roomName });
   }
 
-  async updateUser(username: string) {
+  async updateMe(username: string) {
     return this.axiosInstance.put('/user', { username })
   }
 
@@ -47,8 +48,13 @@ class Api {
   }
 
   async updateUserStatus(userId: string, status: boolean) {
-    const { data } = await this.axiosInstance.patch(`users/${userId}/status`, { status })
+    const { data } = await this.axiosInstance.patch(`/users/${userId}/status`, { status })
     return data;
+  }
+
+  async updateUser(user: User) {
+    await this.axiosInstance.put('/users', { ...user })
+    return this.getAllUsers()
   }
 }
 

@@ -13,7 +13,7 @@ export default () => ({
   app: {
     uri: process.env.APP_URI,
     port: process.env.APP_PORT || 8080,
-    admins: JSON.parse(process.env.APP_ADMINS),
+    superUsers: JSON.parse(process.env.APP_SUPER_USERS),
     isDev: process.env.NODE_ENV === 'development',
     client: {
       uri: process.env.APP_CLIENT_URI,

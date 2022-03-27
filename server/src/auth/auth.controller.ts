@@ -61,6 +61,9 @@ export class AuthController {
       username: user.username,
       userId: user.id,
       roles: user.roles,
+      isSuperUser: this.configService
+        .get('app.superUsers')
+        .includes(user.email),
     };
   }
 }
