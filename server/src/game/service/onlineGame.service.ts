@@ -36,8 +36,8 @@ export class OnlineGameService {
     return { whitePlayer: game.whitePlayer.id };
   }
 
-  async finishGame(gameId: string, winnerId: string) {
-    const winner = await this.userRepository.getById(winnerId);
-    await this.gameRepository.setWinner(gameId, winner);
+  async finishGame(gameId: string, winnerId: string, isDraw: boolean) {
+    const winner = isDraw ? null : await this.userRepository.getById(winnerId);
+    await this.gameRepository.setWinner(gameId, winner, isDraw);
   }
 }

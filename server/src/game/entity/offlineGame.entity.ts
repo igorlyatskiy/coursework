@@ -32,4 +32,7 @@ export class OfflineGameEntity extends BaseEntity {
 
   @Column({ nullable: true })
   winnerColor: 'w' | 'b';
+
+  @Column({ nullable: true })
+  isDraw: boolean;
 }

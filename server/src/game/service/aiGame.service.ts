@@ -22,13 +22,13 @@ export class AiGameService {
     return !!room;
   }
 
-  async startGame(user: UserEntity) {
-    const game = new AiGameEntity(user);
+  async startGame(user: UserEntity, level: number) {
+    const game = new AiGameEntity(user, level);
     await this.gameRepository.saveNewGame(game);
     return game.id;
   }
 
-  async finishGame(gameId: string, winnerColor: 'w' | 'b') {
-    await this.gameRepository.setWinner(gameId, winnerColor);
+  async finishGame(gameId: string, winnerColor: 'w' | 'b', isDraw: boolean) {
+    await this.gameRepository.setWinner(gameId, winnerColor, isDraw);
   }
 }

@@ -2,6 +2,7 @@ import { createAction } from "@reduxjs/toolkit";
 import { PartialMove } from "chess.ts";
 
 import {Session} from "../../components/WithSession";
+import { GAME_TYPES } from "../../Constants";
 
 export const APP_CONNECT = 'APP_CONNECT_SERVER'
 export const APP_SET_SESSION = 'APP_SET_SESSION'
@@ -29,7 +30,12 @@ export const setSession = createAction<Session, string>(APP_SET_SESSION);
 
 export const joinOnlineGame = createAction<string, string>(ONLINE_JOIN_GAME);
 export const startOfflineGame = createAction<string, string>(OFFLINE_START_GAME);
-export const startAiGame = createAction<string, string>(AI_START_GAME);
+
+export interface StartAiGamePayload {
+    activeGameType: GAME_TYPES;
+    aiLevel: number;
+}
+export const startAiGame = createAction<StartAiGamePayload, string>(AI_START_GAME);
 
 export const leaveGame = createAction<string, string>(GAME_LEAVE_GAME)
 

@@ -18,10 +18,10 @@ import {
   OFFLINE_APPROVE_START,
   OFFLINE_START_GAME,
   ONLINE_JOIN_GAME,
-  ONLINE_MOVE_OPPONENT_FIGURE, START_FIGURE_MOVEMENT, STOP_FIGURE_MOVEMENT,
+  ONLINE_MOVE_OPPONENT_FIGURE, START_FIGURE_MOVEMENT, StartAiGamePayload, STOP_FIGURE_MOVEMENT,
 } from "./actions";
 import { State } from "./type";
-import { GAME_TYPES, SERVER_URI } from "../../Constants";
+import { DEFAULT_AI_LEVEL, GAME_TYPES, SERVER_URI } from "../../Constants";
 
 const chess = new ChessService()
 export const wsIo = io(SERVER_URI, {
@@ -42,6 +42,7 @@ const defaultState: State = {
     gameId: null,
     currentGameType: null,
     isFigureMoving: false,
+    aiLevel: null,
   },
   app: {
     isServerConnected: false,
@@ -56,6 +57,7 @@ export const mainReducer = createReducer(defaultState, {
   [APP_SET_SESSION]: (state, { payload }) => {
     state.app.session = payload;
   },
+
   [ONLINE_JOIN_GAME]: (state, { payload }) => {
     state.game.chess.reset();
     state.game.board = state.game.chess.board();
@@ -72,18 +74,21 @@ export const mainReducer = createReducer(defaultState, {
     state.game.currentGameType = payload;
     wsIo.emit(`joinGame__${payload}`);
   },
-  [AI_START_GAME]: (state, { payload }) => {
+  [AI_START_GAME]: (state, { payload }: { payload: StartAiGamePayload }) => {
     state.game.chess.reset();
     state.game.board = state.game.chess.board();
     state.game.validMoves = [];
     state.game.isGameFinished = false;
-    state.game.currentGameType = payload;
-    wsIo.emit(`joinGame__${payload}`);
+    state.game.currentGameType = payload.activeGameType;
+    state.game.aiLevel = payload.aiLevel;
+    wsIo.emit(`joinGame__${payload.activeGameType}`, { aiLevel: payload.aiLevel });
   },
+
   [GAME_LEAVE_GAME]: (state, { payload }) => {
     wsIo.emit(`leaveGame__${GAME_TYPES.online}`, { roomId: payload });
     state.game.isGameActive = false;
   },
+
   [GAME_APPROVE_START]: (state, { payload }) => {
     state.game.isGameActive = true;
     const isWhite = state?.app?.session?.userId === payload.whitePlayer;
@@ -106,6 +111,8 @@ export const mainReducer = createReducer(defaultState, {
     state.game.gameId = payload.gameId;
     message.info(`You begin!`);
   },
+
+
   [GAME_GET_VALID_MOVES]: (state, { payload }) => {
     state.game.validMoves = state.game.chess.moves(payload);
     console.log(state.game.validMoves);
@@ -129,21 +136,24 @@ export const mainReducer = createReducer(defaultState, {
     });
 
     if (state.game.isGameFinished) {
-      switch (state.game.currentGameType) {
-        case GAME_TYPES.offline:
-          message.info("Game is finished!")
-          break;
-        default:
-          message.success("Game is finished!")
+      const isDraw = state.game.chess.isDraw();
+
+      if (isDraw) {
+        message.info("Draw!");
+      } else {
+        message.info("Game is finished!")
       }
 
       wsIo.emit(`finishGame__${state.game.currentGameType}`, {
         gameId: state.game.gameId,
         winnerId: state?.app?.session?.userId,
         winnerColor: state.game.activePlayerColor,
+        isDraw
       })
     }
   },
+
+
   [ONLINE_MOVE_OPPONENT_FIGURE]: (state, { payload }) => {
     const { move, isGameFinished } = payload;
     if (state.game.chess.move(move)) {
@@ -158,7 +168,7 @@ export const mainReducer = createReducer(defaultState, {
     }
   },
   [AI_MOVE_FIGURE]: (state, { payload }) => {
-    const move = state.game.chess.moveAI(3);
+    const move = state.game.chess.moveAI(state.game.aiLevel || DEFAULT_AI_LEVEL);
     if (move) {
       state.game.chess.move(move as PartialMove);
       state.game.board = state.game.chess.board();

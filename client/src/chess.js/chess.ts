@@ -2,7 +2,20 @@
 import { Chess, Color, PartialMove, Piece } from "chess.ts";
 
 
-import ChessConstants, { bishopEvalBlack, bishopEvalWhite, blackDebuts, evalQueen, kingEvalBlack, kingEvalWhite, knightEval, pawnEvalBlack, pawnEvalWhite, rookEvalBlack, rookEvalWhite, whiteDebuts } from "./Constants";
+import ChessConstants, {
+  bishopEvalBlack,
+  bishopEvalWhite,
+  blackDebuts,
+  evalQueen,
+  kingEvalBlack,
+  kingEvalWhite,
+  knightEval,
+  pawnEvalBlack,
+  pawnEvalWhite,
+  rookEvalBlack,
+  rookEvalWhite,
+  whiteDebuts
+} from "./Constants";
 import Constants, { FIGURES_NAMES } from "../Constants";
 
 
@@ -33,7 +46,9 @@ export default class ChessService {
 
   inCheckmate = () => this.chess.inCheckmate();
 
-  isGameActive = () => !this.chess.gameOver()
+  isGameActive = () => !this.chess.gameOver();
+
+  isDraw = () => this.chess.inDraw();
 
   move = (object: string | PartialMove) => this.chess.move(object);
 
@@ -104,14 +119,15 @@ export default class ChessService {
   }
 
   getSquare = (square: string) => {
-    const [rowNumber, colNumber] = this.getSquareIndex(square);
+    const [ rowNumber, colNumber ] = this.getSquareIndex(square);
     return this.chess.board()[rowNumber][colNumber]
   }
 
   getSquareByIndex = (row: number, col: number) => {
     if (this.chess.board()[row] === undefined) {
       return undefined
-    };
+    }
+    ;
     return this.chess.board()[row][col];
   }
 
@@ -119,7 +135,7 @@ export default class ChessService {
   getSquareIndex = (square: string) => {
     const rowNumber = Constants.rowNumbers - (+square[1]);
     const columnNumber = Constants.letters.indexOf(square[0]);
-    return [rowNumber, columnNumber]
+    return [ rowNumber, columnNumber ]
   }
 
   getSquareNameByIndex = (row: number, col: number) => {
@@ -137,7 +153,7 @@ export default class ChessService {
   getAttackCheckMoves = (square: string) => {
     const ableMoves: string[] = [];
     const figure = this.getSquare(square);
-    const [rowNumber, colNumber] = this.getSquareIndex(square);
+    const [ rowNumber, colNumber ] = this.getSquareIndex(square);
     if (figure !== null) {
       switch (figure.type) {
 
@@ -473,7 +489,7 @@ export default class ChessService {
     let ableMoves: string[] = [];
     const kingMoves = this.getAllKingMoves();
     const figure = this.getSquare(square);
-    const [rowNumber, colNumber] = this.getSquareIndex(square);
+    const [ rowNumber, colNumber ] = this.getSquareIndex(square);
     if (figure !== null) {
       switch (figure.type) {
 
@@ -944,7 +960,7 @@ export default class ChessService {
 
   getAllKingMoves = () => {
     const moves = [];
-    const [kingRow, kingCol] = this.getSquareIndex(this.getKingPosition() || '');
+    const [ kingRow, kingCol ] = this.getSquareIndex(this.getKingPosition() || '');
     for (let i = -1; i <= 1; i += 1) {
       for (let j = -1; j <= 1; j += 1) {
         moves.push(this.getSquareNameByIndex(kingRow + i, kingCol + j));

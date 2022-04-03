@@ -15,6 +15,14 @@ export enum GAME_TYPES {
   ai = 'ai',
 }
 
+export enum AI_LEVEL {
+  easy = 1,
+  medium = 2,
+  hard = 3,
+}
+
+export const DEFAULT_AI_LEVEL = AI_LEVEL.medium;
+
 export const SERVER_URI: string = process.env.REACT_APP_SERVER_URI as string;
 
 export const FIGURE_MOVING_TIME = 300;

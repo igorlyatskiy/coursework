@@ -6,7 +6,7 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
-import { Controller, Logger, UseGuards } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 
 import { OnlineGameService } from './service/onlineGame.service';
@@ -98,9 +98,9 @@ export class GameGateway
 
   @SubscribeMessage(`finishGame__${GAME_TYPES.online}`)
   async finishOnlineGame(client: Socket, payload: any) {
-    const { gameId, winnerId } = payload;
+    const { gameId, winnerId, isDraw } = payload;
 
-    await this.onlineGameService.finishGame(gameId, winnerId);
+    await this.onlineGameService.finishGame(gameId, winnerId, isDraw);
 
     client.broadcast.to(gameId).emit(`finishGame__${GAME_TYPES.online}`);
     this.io.socketsLeave(gameId);
@@ -108,12 +108,23 @@ export class GameGateway
 
   @SubscribeMessage(`finishGame__${GAME_TYPES.offline}`)
   async finishOfflineGame(client: Socket, payload: any) {
-    const { gameId, winnerColor } = payload;
+    const { gameId, winnerColor, isDraw } = payload;
 
-    await this.offlineGameService.finishGame(gameId, winnerColor);
+    await this.offlineGameService.finishGame(gameId, winnerColor, isDraw);
     // TODO: Add finish offline game logic.
 
     client.broadcast.to(gameId).emit(`finishGame__${GAME_TYPES.offline}`);
+    this.io.socketsLeave(gameId);
+  }
+
+  @SubscribeMessage(`finishGame__${GAME_TYPES.ai}`)
+  async finishAiGame(client: Socket, payload: any) {
+    const { gameId, winnerColor, isDraw } = payload;
+
+    await this.aiGameService.finishGame(gameId, winnerColor, isDraw);
+
+    client.broadcast.to(gameId).emit(`finishGame__${GAME_TYPES.ai}`);
+    this.io.socketsLeave(gameId);
   }
 
   @SubscribeMessage(`leaveGame__${GAME_TYPES.online}`)
@@ -128,10 +139,9 @@ export class GameGateway
     if (room?.game) {
       const winnerId =
         room.creator.id === user.id ? room.guestPlayer.id : user.id;
-      await this.onlineGameService.finishGame(roomId, winnerId);
+      await this.onlineGameService.finishGame(roomId, winnerId, false);
     }
 
-    // TODO: If game was created.
     client.broadcast.to(roomId).emit('leaveGame');
     this.io.socketsLeave(roomId);
   }
@@ -148,8 +158,11 @@ export class GameGateway
 
   @UseGuards(WsGuard)
   @SubscribeMessage(`joinGame__${GAME_TYPES.ai}`)
-  async joiAiOfflineGame(client: Socket, { user }: JwtAuthData): Promise<void> {
-    const gameId = await this.aiGameService.startGame(user);
+  async joiAiOfflineGame(
+    client: Socket,
+    { user, aiLevel }: JwtAuthData & { aiLevel: number },
+  ): Promise<void> {
+    const gameId = await this.aiGameService.startGame(user, aiLevel);
     client.emit(`joinGame__${GAME_TYPES.ai}`, { gameId });
   }
 

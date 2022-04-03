@@ -22,13 +22,14 @@ export class OnlineGameRepository extends Repository<OnlineGameEntity> {
     await this.save(game);
   }
 
-  async setWinner(gameId: string, winner: UserEntity) {
+  async setWinner(gameId: string, winner: UserEntity, isDraw: boolean) {
     return this.update(
       {
         id: gameId,
       },
       {
         winner,
+        isDraw,
       },
     );
   }

@@ -31,4 +31,7 @@ export class OnlineGameEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, { nullable: true })
   winner: UserEntity;
+
+  @Column({ nullable: true })
+  isDraw: boolean;
 }

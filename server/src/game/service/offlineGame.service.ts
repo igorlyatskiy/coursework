@@ -28,7 +28,8 @@ export class OfflineGameService {
     return game.id;
   }
 
-  async finishGame(gameId: string, winnerColor: 'w' | 'b') {
-    await this.gameRepository.setWinner(gameId, winnerColor);
+  async finishGame(gameId: string, winnerColor: 'w' | 'b', isDraw: boolean) {
+    winnerColor = isDraw ? null : winnerColor;
+    await this.gameRepository.setWinner(gameId, winnerColor, isDraw);
   }
 }

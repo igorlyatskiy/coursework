@@ -1,5 +1,5 @@
 import ChessService from "../../chess.js/chess";
-import { Board, GAME_TYPES } from "../../Constants";
+import { AI_LEVEL, Board, GAME_TYPES } from "../../Constants";
 import { Session } from "../../components/WithSession";
 import { Color } from "chess.ts";
 
@@ -15,6 +15,7 @@ export interface State {
     gameId: string | null,
     currentGameType: GAME_TYPES | null,
     isFigureMoving: boolean,
+    aiLevel: AI_LEVEL | null,
   },
   app: {
     isServerConnected: boolean,

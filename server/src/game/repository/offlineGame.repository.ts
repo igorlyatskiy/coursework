@@ -21,13 +21,14 @@ export class OfflineGameRepository extends Repository<OfflineGameEntity> {
     await this.save(game);
   }
 
-  async setWinner(gameId: string, winnerColor: 'w' | 'b') {
+  async setWinner(gameId: string, winnerColor: 'w' | 'b', isDraw: boolean) {
     return this.update(
       {
         id: gameId,
       },
       {
         winnerColor,
+        isDraw,
       },
     );
   }

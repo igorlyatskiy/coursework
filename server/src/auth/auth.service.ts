@@ -21,8 +21,4 @@ export class AuthService {
       email: req.user.email,
     });
   }
-
-  createAuthUser(data: any) {
-    return data;
-  }
 }
