@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { SERVER_URI } from "../Constants";
-import { User } from "../pages/admin/Users/Users";
+import { User } from "../pages/Admin/Users/Users";
 
 class Api {
   baseUrl: string = SERVER_URI;

@@ -7,12 +7,12 @@ import HeaderComponent from "./components/Header/Header";
 
 import './App.css'
 import HomePage from "./pages/Home/HomePage";
-import NotFoundPage from "./pages/user/Helpers/NotFound/NotFoundPage";
-import OnlineGamePage from "./pages/user/Game/GamePage";
+import NotFoundPage from "./pages/User/Helpers/NotFound/NotFoundPage";
+import OnlineGamePage from "./pages/User/Game/GamePage";
 import { wsIo } from "./redux/main/reducer";
 import { State } from "./redux/main/type";
 import { RootReducer } from "./redux";
-import LoadingPage from "./pages/user/Helpers/Loading/Loading";
+import LoadingPage from "./pages/User/Helpers/Loading/Loading";
 import {
   approveAiGame,
   approveOfflineGame,
@@ -21,12 +21,12 @@ import {
   moveAiFigure,
   moveOpponentFigure
 } from "./redux/main/actions";
-import RoomsPage from "./pages/user/Rooms/Rooms";
-import SettingsPage from "./pages/user/Settings/Settings";
-import TopUsersPage from "./pages/user/Top/TopUsers";
-import Game from "./pages/user/OfflineGame/Game";
+import RoomsPage from "./pages/User/Rooms/Rooms";
+import SettingsPage from "./pages/User/Settings/Settings";
+import TopUsersPage from "./pages/User/Top/TopUsers";
+import Game from "./pages/User/OfflineGame/Game";
 import { FIGURE_MOVING_TIME, GAME_TYPES } from "./Constants";
-import AdminUsersPage from "./pages/admin/Users/Users";
+import AdminUsersPage from "./pages/Admin/Users/Users";
 
 const { Content } = Layout;
 

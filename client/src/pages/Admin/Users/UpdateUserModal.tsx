@@ -39,7 +39,7 @@ export default function UpdateUserModal({ handleOk, handleCancel, setUsers, user
       }
       message.success('User was updated');
     } catch (error) {
-      message.error("Can't update a user");
+      message.error("Can't update a User");
     }
   }
 
