@@ -1,8 +1,10 @@
 import React, { useCallback } from "react";
 import { Button, Form, Input, message, Modal } from "antd";
+import { useDispatch } from "react-redux";
 
 import api from "../../../api/api";
 import { useNavigate } from "react-router-dom";
+import { joinOnlineGame } from "../../../redux/main/actions";
 
 interface CreateRoomModalProps {
   isModalVisible: boolean;
@@ -14,6 +16,7 @@ interface CreateRoomModalProps {
 export default function CreateRoomModal({ isModalVisible, handleOk, handleCancel, setRooms }: CreateRoomModalProps) {
   const [ form ] = Form.useForm();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const goToGamePage = useCallback((gameId: string) => navigate(`/game/${gameId}`, { replace: true }), [ navigate ]);
 
   const handleFormSubmit = async (event: { name: string }) => {
@@ -27,6 +30,7 @@ export default function CreateRoomModal({ isModalVisible, handleOk, handleCancel
         goToGamePage(newRoomId);
       }
       message.success('Room has been created');
+      dispatch(joinOnlineGame(newRoomId));
     } catch (error) {
       message.error("Can't create a room");
     }

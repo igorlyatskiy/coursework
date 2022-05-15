@@ -20,7 +20,7 @@ function GamePage() {
 
   useEffect(() => {
     if (gameId && game.currentGameType === GAME_TYPES.online) {
-      dispatch(joinOnlineGame(gameId))
+      dispatch(joinOnlineGame(gameId));
     }
 
     return () => {
