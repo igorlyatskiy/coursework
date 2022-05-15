@@ -88,5 +88,6 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "homepage": "https://codejam-chess-backend.herokuapp.com"
 }
