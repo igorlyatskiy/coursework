@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import api from "../api/api";
 import { setSession } from "../redux/main/actions";
+import { JWT_FIELD_NAME, LOGOUT_QUERY_PARAM } from "../Constants";
 
 export interface Session {
   email: string;
@@ -46,6 +48,19 @@ export function getSession(dispatch: any) {
 function withSession(WrappedComponent: React.ComponentType<any>) {
   return (props: any) => {
     const dispatch = useDispatch();
+    const [ searchParams, setSearchParams ] = useSearchParams();
+    const token = searchParams.get(JWT_FIELD_NAME);
+    const logout = searchParams.get(LOGOUT_QUERY_PARAM);
+
+    if (token) {
+      localStorage.setItem(JWT_FIELD_NAME, token);
+      searchParams.delete(JWT_FIELD_NAME);
+    }
+
+    if (logout) {
+      localStorage.removeItem(JWT_FIELD_NAME)
+      searchParams.delete(LOGOUT_QUERY_PARAM);
+    }
 
     useEffect(
       () => {
@@ -53,6 +68,11 @@ function withSession(WrappedComponent: React.ComponentType<any>) {
           dispatch(setSession(sessionCache));
           return;
         }
+
+        if (logout || token) {
+          setSearchParams(searchParams);
+        }
+
         getSession(dispatch);
       }, []
     );

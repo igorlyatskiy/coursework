@@ -12,7 +12,7 @@ export default () => ({
   },
   app: {
     uri: process.env.APP_URI,
-    port: process.env.APP_PORT || 8080,
+    port: process.env.PORT || 8080,
     superUsers: JSON.parse(process.env.APP_SUPER_USERS),
     isDev: process.env.NODE_ENV === 'development',
     client: {
@@ -28,7 +28,7 @@ export default () => ({
     jwt: {
       secret: process.env.JWT_SECRET_KEY,
       exp: parseInt(process.env.JWT_EXP_TIME),
-      cookieName: 'JWT_TOKEN',
+      tokenName: 'jwt_token',
     },
   },
   sentry: {

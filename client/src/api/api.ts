@@ -1,11 +1,25 @@
 import axios from "axios";
 
-import { SERVER_URI } from "../Constants";
+import { JWT_FIELD_NAME, SERVER_URI } from "../Constants";
 import { User } from "../pages/Admin/Users/Users";
 
 class Api {
   baseUrl: string = SERVER_URI;
-  axiosInstance = axios.create({ baseURL: this.baseUrl, withCredentials: true })
+  axiosInstance = axios.create({
+    baseURL: this.baseUrl,
+    withCredentials: true,
+  })
+
+  constructor() {
+    this.axiosInstance.interceptors.request.use((config) => {
+      const token = localStorage.getItem(JWT_FIELD_NAME) || '';
+      config.headers = {
+        ...config.headers,
+        [JWT_FIELD_NAME]: token,
+      }
+      return config;
+    })
+  }
 
   static instance() {
     return apiInstance

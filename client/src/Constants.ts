@@ -25,6 +25,9 @@ export const DEFAULT_AI_LEVEL = AI_LEVEL.medium;
 
 export const SERVER_URI: string = process.env.REACT_APP_SERVER_URI as string;
 
+export const JWT_FIELD_NAME = 'jwt_token';
+export const LOGOUT_QUERY_PARAM = 'logout';
+
 export const FIGURE_MOVING_TIME = 300;
 
 export const SQUARE_SIZE = 100

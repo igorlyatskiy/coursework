@@ -22,7 +22,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private configService: ConfigService,
   ) {
-    this.JWT_COOKIE_NAME = this.configService.get('auth.jwt.cookieName');
+    this.JWT_COOKIE_NAME = this.configService.get('auth.jwt.tokenName');
     this.CLIENT_URI = this.configService.get('app.client.uri');
   }
 
@@ -34,14 +34,12 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res) {
     const token = await this.authService.validateGoogle(req);
-    res.cookie(this.JWT_COOKIE_NAME, token);
-    res.redirect(this.CLIENT_URI);
+    res.redirect(this.CLIENT_URI + `?${this.JWT_COOKIE_NAME}=${token}`);
   }
 
   @Get('google/logout')
   googleLogout(@Res() res) {
-    res.clearCookie(this.JWT_COOKIE_NAME);
-    res.redirect(this.CLIENT_URI);
+    res.redirect(this.CLIENT_URI + `?logout=true`);
   }
 
   @Get('session')

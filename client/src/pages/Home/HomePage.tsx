@@ -53,7 +53,7 @@ function HomePage() {
     {
       icon: null,
       text: "Users.",
-      path: '/Admin/users',
+      path: '/admin/users',
     },
   ];
 

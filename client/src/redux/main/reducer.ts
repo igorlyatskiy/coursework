@@ -1,7 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 import { message } from "antd";
-import Cookies from 'js-cookie';
 import { PartialMove } from "chess.ts";
 
 import ChessService from "../../chess.js/chess";
@@ -21,12 +20,12 @@ import {
   ONLINE_MOVE_OPPONENT_FIGURE, START_FIGURE_MOVEMENT, StartAiGamePayload, STOP_FIGURE_MOVEMENT,
 } from "./actions";
 import { State } from "./type";
-import { DEFAULT_AI_LEVEL, GAME_TYPES, SERVER_URI } from "../../Constants";
+import { DEFAULT_AI_LEVEL, GAME_TYPES, JWT_FIELD_NAME, SERVER_URI } from "../../Constants";
 
 const chess = new ChessService()
 export const wsIo = io(SERVER_URI, {
   extraHeaders: {
-    JWT_TOKEN: Cookies.get('JWT_TOKEN') || ''
+    [JWT_FIELD_NAME]: localStorage.getItem(JWT_FIELD_NAME) || ''
   }
 });
 
